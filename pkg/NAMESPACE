@@ -1,0 +1,12 @@
+importFrom(R6,R6Class)
+importFrom(parallel,detectCores,mclapply)
+export(
+	TestCase,
+	InDirTest,
+	TestSuite,
+	TestResults,
+	SingleTestResult,
+	get_suite,
+	get_suitefromDiscoveredTestInstances,
+	myLogger
+)
