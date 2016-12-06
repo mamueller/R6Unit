@@ -51,9 +51,10 @@ SingleTestResult<-R6Class("SingleTestResult",
       td<-private
       textLines<-character()
       for(n in names(td)){
-        textLines<-c(textLines,sprintf("\n%s:=%s",n,toString(td[[n]])))
+        #textLines<-c(textLines,sprintf("\n%s:=%s",n,toString(td[[n]])))
+        textLines<-c(textLines,sprintf("\n%s:=%s",n,paste(td[[n]],collapse="\n")))
       }
-      textLines=toString(paste(textLines,sep="\n"))
+      #textLines=toString(paste(textLines,sep="\n"))
       if(self$has_failed() | self$has_error()){
         # make sure to be verbose in case of error or failure
         tl$error(textLines)

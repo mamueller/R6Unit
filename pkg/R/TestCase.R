@@ -65,9 +65,9 @@ TestCase<- R6Class("TestCase",
         sr$add_output(out)
         if (inherits(timing, "simpleError")) { 
           sr$set_error() 
-          msg<-paste(msg,toString(timing))
+          msg<-paste(msg,timing)
         }
-        sr$add_message(toString(msg))
+        sr$add_message(msg)
       }else{
         cat(paste0("method: ", self$name," does not exist.\n"))
         return(NULL)

@@ -61,7 +61,7 @@ InDirTest<- R6Class("InDirTest",
           sr$set_error() 
           msg<-paste(msg,"error in inDirTestSetUp", toString(setupTiming))
         }else{
-          sr$add_message(toString(msg))
+          sr$add_message(msg)
 
 				  timing<-tryCatch(
             funToTest() ,
@@ -71,9 +71,9 @@ InDirTest<- R6Class("InDirTest",
           sr$add_output(c(dirMsg,out))
           if (inherits(timing, "simpleError")) { 
             sr$set_error() 
-            msg<-paste(msg,toString(timing))
+            msg<-paste(msg,timing)
           }
-          sr$add_message(toString(msg))
+          sr$add_message(msg)
         }
       }else{
         cat(paste0("method: ", self$name," does not exist.\n"))
