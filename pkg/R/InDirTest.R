@@ -49,8 +49,7 @@ InDirTest<- R6Class("InDirTest",
           setwd(oldwd)
         }
 				setupTiming<-tryCatch(
-            c(self$inDirSetUp(),
-            funToTest()),
+            self$inDirSetUp(),
             error=function(err){
               restore()
               return(err)
