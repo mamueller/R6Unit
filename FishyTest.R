@@ -1,4 +1,4 @@
-
+#
 # vim:set ff=unix expandtab ts=2 sw=2:
 # this is an Example Class used by the tests to check the frameworks functionality
 #----------------------------
