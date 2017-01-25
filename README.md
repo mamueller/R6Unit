@@ -8,4 +8,3 @@ The package runs tests in parallel and has (or rather gradually develops) an int
 the python3 unittest
 It is still undocumented but I will soon give roxygen2 a try.
 
-
