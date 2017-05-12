@@ -32,7 +32,7 @@ TestTestCase<-R6Class("TestTestCase",
 		#--------------------------------------------
 		test.nFail=function(){
 			res=TestResults$new()
-			tc=FishyTest$new("test.fail")
+			tc=FishyTest $new("test.fail")
 			tc$run(res)
       self$assertTrue(res$get_nFailures()==1)
 		}
@@ -46,6 +46,25 @@ TestTestCase<-R6Class("TestTestCase",
 			sr<-tc$get_SingleTestResult()
       l<-sr$get_output()
       self$assertTrue(l=="blubbering")
+    }
+    ,
+		#--------------------------------------------
+		test.setUp=function(){
+    # make sure that the output of the setUp FUnction is there
+    setupMsg='in_setUp'
+      FishyTestWithSetUpAndTearDown<-R6Class("FishyTestWithSetUpAndTearDown",
+      	inherit=FishyTest
+        ,
+      	public=list(
+      		setUp=function(){
+      			cat(setupMsg)
+      		}
+      	)
+      )
+			tc<-FishyTestWithSetUpAndTearDown$new("test.blubber")
+			sr<-tc$get_SingleTestResult()
+      l<-sr$get_output()
+      self$assertTrue(l==paste('in_setUp','blubbering',sep=''))
     }
 	)
 )

@@ -1,7 +1,7 @@
 
 # vim:set ff=unix expandtab ts=2 sw=2:
 #----------------------------
-# the following function is actually a class method
+# the following functions are actually class methods
 get_suite=function(cls){
   l<-names(cls$public_methods) 
   bool_inds<-grepl(pattern="^test.*",l)
@@ -13,7 +13,63 @@ get_suite=function(cls){
 
 TestCase<- R6Class("TestCase",
   private=list(
-    res=NULL 
+    res=NULL
+    ,
+    cmsg=NULL
+    ,
+    cout=NULL
+    ,
+    oldWarn=NULL
+    ,
+    #----------------------------
+    initIO=function() {
+        private$cmsg<-textConnection("msg","w")
+        private$cout<-textConnection("out","w")
+        sink(private$cmsg,type="message")
+        sink(private$cout,type="output")
+
+        private$oldWarn=getOption("warn")
+        options(warn=1) # print warnings immidiately , otherwise they will be printed
+        # in the toplevel, so that we cant capture them specifically for the code
+        # under test
+    }
+    ,
+    #----------------------------
+    restore=function(){
+      sink(type="output")
+      sink(type="message")
+      close(private$cout)
+      close(private$cmsg)
+      options(warn=private$oldWarn)
+    }
+    ,
+    #----------------------------
+    run_code=function(sr,funToTest){
+		  setupTiming<-tryCatch(
+          self$setUp(),
+          error=function(err){
+            private$restore()
+            return(err)
+          }
+      )
+      if (inherits(setupTiming, "simpleError")) { 
+        sr$set_error() 
+        msg<-paste(msg,"error in setUp", toString(setupTiming))
+      }else{
+        sr$add_message(msg)
+		    timing<-tryCatch(
+            funToTest()
+            ,error=function(err){return(err)}
+            ,finally=private$restore()
+        )
+        sr$add_output(out)
+        if (inherits(timing, "simpleError")) { 
+          sr$set_error() 
+          msg<-paste(msg,timing)
+        }
+        sr$add_message(msg)
+      }
+    }
   )
   ,
   public = list(
@@ -43,31 +99,9 @@ TestCase<- R6Class("TestCase",
       if(is.element(self$name,names(l))){
         sr$add_run(self$full_name())
         funToTest <- l[[self$name]]
-        oldWarn=getOption("warn")
-        options(warn=1) # print warnings immidiately , other wise they will be printed
-        # in the toplevel, so that we cant capture them specifically for the code
-        # under test
-        cmsg<-textConnection("msg","w")
-        cout<-textConnection("out","w")
-        sink(cmsg,type="message")
-        sink(cout,type="output")
-				timing<-tryCatch(
-            funToTest()
-            ,error=function(err){return(err)}
-            ,finally=c(
-              sink(type="output")
-              ,sink(type="message")
-              ,close(cout)
-              ,close(cmsg)
-              ,options(warn=oldWarn)
-            )
-        )
-        sr$add_output(out)
-        if (inherits(timing, "simpleError")) { 
-          sr$set_error() 
-          msg<-paste(msg,timing)
-        }
-        sr$add_message(msg)
+        private$initIO()
+
+        private$run_code(sr,funToTest)
       }else{
         cat(paste0("method: ", self$name," does not exist.\n"))
         return(NULL)
@@ -104,6 +138,11 @@ TestCase<- R6Class("TestCase",
             toString(arg1),toString(arg2)))
         sr$set_fail()
       }
+    }
+    ,
+    #----------------------------
+    setUp=function(){
+      # to be overloaded in subclasses
     }
   )
 )

@@ -29,7 +29,7 @@ TestInDirTest<-R6Class("TestInDirTest",
       IoTest<-R6Class("IoTest",
         inherit=InDirTest,
         public=list(
-          inDirSetUp=function(){
+          setUp=function(){
             print("######## everything is fine #############")
           }
           ,
@@ -46,6 +46,46 @@ TestInDirTest<-R6Class("TestInDirTest",
     ,
     #------------------------
 	  test.failingSetup=function(){
+      IoTest<-R6Class("IoTest",
+        inherit=InDirTest,
+        public=list(
+          setUp=function(){
+            stop("an error in setup")
+          }
+          ,
+          ####
+          test.somethingThatNeverFails=function(){
+            self$assertTrue(TRUE)
+          }
+        )
+      )
+      iot<-IoTest$new("test.somethingThatNeverFails")
+      sr<-iot$get_SingleTestResult()
+      self$assertEqual(sr$has_error(),TRUE)
+    }
+    ,
+    #------------------------
+	  test.workingInDirSetUp=function(){
+      IoTest<-R6Class("IoTest",
+        inherit=InDirTest,
+        public=list(
+          inDirSetUp=function(){
+            print("######## everything is fine #############")
+          }
+          ,
+          ####
+          test.somethingThatNeverFails=function(){
+            self$assertTrue(TRUE)
+          }
+        )
+      )
+      iot<-IoTest$new("test.somethingThatNeverFails")
+      sr<-iot$get_SingleTestResult()
+      self$assertEqual(sr$has_error(),FALSE)
+    }
+    ,
+    #------------------------
+	  test.failingInDirSetUp=function(){
       IoTest<-R6Class("IoTest",
         inherit=InDirTest,
         public=list(
