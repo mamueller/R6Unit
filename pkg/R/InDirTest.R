@@ -61,23 +61,6 @@ InDirTest<- R6Class("InDirTest",
           msg<-paste(msg,"error in inDirTestSetUp", toString(inDirSetUpTimeing))
         }else{
           private$run_code(sr,funToTest)
-        #  if (inherits(setupTiming, "simpleError")) { 
-        #    sr$set_error() 
-        #    msg<-paste(msg,"error in setUp", toString(setupTiming))
-        #  }else{
-        #    sr$add_message(msg)
-				#    timing<-tryCatch(
-        #        funToTest()
-        #        ,error=function(err){return(err)}
-        #        ,finally=private$restore()
-        #    )
-        #    sr$add_output(out)
-        #    if (inherits(timing, "simpleError")) { 
-        #      sr$set_error() 
-        #      msg<-paste(msg,timing)
-        #    }
-        #    sr$add_message(msg)
-        #  }
         }
       }else{
         cat(paste0("method: ", self$name," does not exist.\n"))
