@@ -47,7 +47,12 @@ SingleTestResult<-R6Class("SingleTestResult",
     }
     ,
     summary= function(){
-      tl<-myLogger()
+      logDirName <- 'logs'
+	    if(!dir.exists(logDirName)){
+        dir.create(logDirName)
+      }
+      logFileName<-file.path('logs',private$fullName)
+      tl<-myLogger(logFileName)
       td<-private
       textLines<-character()
       for(n in names(td)){

@@ -60,7 +60,8 @@ TestResults<-R6Class("TestResults",
     }
     ,
     summary=function(){
-      tl<-myLogger()
+      logFileName<-"test.log"
+      tl<-myLogger(logFileName)
       tl$info(
         paste0(
           ':\n',
