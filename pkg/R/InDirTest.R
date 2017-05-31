@@ -4,80 +4,49 @@
 InDirTest<- R6Class("InDirTest",
   inherit=TestCase,
   private=list(
-    Io_tmp="IoTestResults_tmp",
+    Io_tmp="IoTestResults_tmp"
+    ,
     res=NULL
     ,
     oldwd=NULL
     ,
+    oldLibPath=NULL
+    ,
+    #----------------------------
+    myDirPath=function(){
+      file.path(private$Io_tmp,self$full_name())
+    }
+    ,
     #----------------------------
     restore=function(){
       super$restore()
+
+      .libPaths(private$oldLibPath)
+      unlink(private$oldLibPath,recursive=TRUE,force=TRUE)
       setwd(private$oldwd)
     }
     ,
     #----------------------------
     initIO=function(){
       super$initIO()
-      full_name<-self$full_name()
-      myPrivateDirPath<-file.path(private$Io_tmp,full_name)
-	    if(dir.exists(myPrivateDirPath)){
+	    if(dir.exists(private$myDirPath())){
         lapply(
-          list.files(include.dirs=TRUE,full.names=TRUE,myPrivateDirPath),
+          list.files(include.dirs=TRUE,full.names=TRUE,private$myDirPath()),
           function(p){unlink(p,recursive=TRUE)}
         )
       }else{
-        dir.create(myPrivateDirPath,recursive=TRUE)
+        dir.create(private$myDirPath(),recursive=TRUE)
       }
-      #if(dir.exists(myPrivateDirPath)){
-	    #  unlink(myPrivateDirPath,recursive=TRUE,force=TRUE) 
-      #}
-      #dir.create(myPrivateDirPath,recursive=TRUE)
-      private$oldwd<-setwd(myPrivateDirPath)
+      myLib <- 'lib'
+      dir.create(myLib,recursive=TRUE)
+      for (d  in .libPaths()){
+        for (pd  in d){
+          cpDir(pd,myLib)
+        }
+      }
+      private$oldLibPath <- .libPaths(myLib)
+      private$oldwd<-setwd(private$myDirPath())
     }
   )
- # ,
- # public = list(
- #   #----------------------------
- #   get_SingleTestResult= function() {
- #     
- #     sr<-SingleTestResult$new()
- #     private$res<-sr    
- #     l=as.list(self)
- #     if(is.element(self$name,names(l))){
- #       full_name<-self$full_name()
- #       sr$add_run(full_name)
- #       funToTest <- l[[self$name]]
-
- #       dirMsg<-paste("#################",getwd(),"#################\n")
-
- #       
- #       private$initIO()
-
- # 			inDirSetUpTimeing<-tryCatch(
- #           self$inDirSetUp(),
- #           error=function(err){
- #             private$restore()
- #             return(err)
- #           }
- #       )
- #       sr$add_output(c(dirMsg,out))
- #       if (inherits(inDirSetUpTimeing, "simpleError")) { 
- #         sr$set_error() 
- #         msg<-paste(msg,"error in inDirTestSetUp", toString(inDirSetUpTimeing))
- #       }else{
- #         private$run_code(sr,funToTest)
- #       }
- #     }else{
- #       cat(paste0("method: ", self$name," does not exist.\n"))
- #       return(NULL)
- #     }
- #     return(sr)
- #   }
- #   ,
- #   #----------------------------
- #   inDirSetUp=function(){
- #     # to be overloaded in subclasses
- #   }
- # )
 )
     
