@@ -26,27 +26,38 @@ TestInDirTest<-R6Class("TestInDirTest",
     ,
     #------------------------
 	  test.workingSetup=function(){
-      IoTest<-R6Class("IoTest",
+      # check if thw setUp function interpretes 
+      # filepaths now locally
+      IoTest1<-R6Class("IoTest1",
         inherit=InDirTest,
+        private=list(
+          content="written by  setUp",
+          #------------------------
+          fn="myPersonalTestFile"
+          #------------------------
+        ),
         public=list(
           setUp=function(){
             print("######## everything is fine #############")
+      			write(private$content,file=private$fn)
           }
           ,
-          ####
+          #------------------------
           test.somethingThatNeverFails=function(){
             self$assertTrue(TRUE)
+            res<-readLines(private$fn)[[1]]  
+            self$assertEqual(private$content,res)
           }
         )
       )
-      iot<-IoTest$new("test.somethingThatNeverFails")
+      iot<-IoTest1$new("test.somethingThatNeverFails")
       sr<-iot$get_SingleTestResult()
       self$assertEqual(sr$has_error(),FALSE)
     }
     ,
     #------------------------
 	  test.failingSetup=function(){
-      IoTest<-R6Class("IoTest",
+      IoTest2<-R6Class("IoTest2",
         inherit=InDirTest,
         public=list(
           setUp=function(){
@@ -59,50 +70,51 @@ TestInDirTest<-R6Class("TestInDirTest",
           }
         )
       )
-      iot<-IoTest$new("test.somethingThatNeverFails")
+      iot<-IoTest2$new("test.somethingThatNeverFails")
       sr<-iot$get_SingleTestResult()
       self$assertEqual(sr$has_error(),TRUE)
     }
-    ,
-    #------------------------
-	  test.workingInDirSetUp=function(){
-      IoTest<-R6Class("IoTest",
-        inherit=InDirTest,
-        public=list(
-          inDirSetUp=function(){
-            print("######## everything is fine #############")
-          }
-          ,
-          ####
-          test.somethingThatNeverFails=function(){
-            self$assertTrue(TRUE)
-          }
-        )
-      )
-      iot<-IoTest$new("test.somethingThatNeverFails")
-      sr<-iot$get_SingleTestResult()
-      self$assertEqual(sr$has_error(),FALSE)
-    }
-    ,
-    #------------------------
-	  test.failingInDirSetUp=function(){
-      IoTest<-R6Class("IoTest",
-        inherit=InDirTest,
-        public=list(
-          inDirSetUp=function(){
-            stop("an error in inDirSetUp")
-          }
-          ,
-          ####
-          test.somethingThatNeverFails=function(){
-            self$assertTrue(TRUE)
-          }
-        )
-      )
-      iot<-IoTest$new("test.somethingThatNeverFails")
-      sr<-iot$get_SingleTestResult()
-      self$assertEqual(sr$has_error(),TRUE)
-    }
+    #,
+    ##------------------------
+	  #test.workingInDirSetUp=function(){
+    #  IoTest3<-R6Class("IoTest3",
+    #    inherit=InDirTest,
+    #    public=list(
+    #      #inDirSetUp=function(){
+    #      setUp=function(){
+    #        print("######## everything is fine #############")
+    #      }
+    #      ,
+    #      ####
+    #      test.somethingThatNeverFails=function(){
+    #        self$assertTrue(TRUE)
+    #      }
+    #    )
+    #  )
+    #  iot<-IoTest3$new("test.somethingThatNeverFails")
+    #  sr<-iot$get_SingleTestResult()
+    #  self$assertEqual(sr$has_error(),FALSE)
+    #}
+    #,
+    ##------------------------
+	  #test.failingInDirSetUp=function(){
+    #  IoTest4<-R6Class("IoTest4",
+    #    inherit=InDirTest,
+    #    public=list(
+    #      setUp=function(){
+    #        stop("an error in inDirSetUp")
+    #      }
+    #      ,
+    #      ####
+    #      test.somethingThatNeverFails=function(){
+    #        self$assertTrue(TRUE)
+    #      }
+    #    )
+    #  )
+    #  iot<-IoTest4$new("test.somethingThatNeverFails")
+    #  sr<-iot$get_SingleTestResult()
+    #  self$assertEqual(sr$has_error(),TRUE)
+    #}
   )
 )
 
