@@ -6,6 +6,9 @@ TestSuite<- R6Class("TestSuite",
     tests=list()
   ),
   public=list(
+    parallel=NULL
+    ,
+    #----------------------------
     initialize=function(listOfTests=NULL){
       if(!is.null(listOfTests)){
         for(tc in listOfTests){
@@ -34,11 +37,14 @@ TestSuite<- R6Class("TestSuite",
     ,
     #----------------------------
     run=function(pr=NULL){
+      n<-2*detectCores()
       if(.Platform$OS.type!="unix"){
-          n<-1
-        } else{
-          n<-2*detectCores()
-        }
+        n <- 1
+      } 
+      if(!is.null(self$parallel)){
+        n <- self$parallel
+      }
+      print(n)
       resultList<-mclapply(
         private$tests,
         mc.cores=n,

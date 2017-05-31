@@ -28,6 +28,10 @@ InDirTest<- R6Class("InDirTest",
       }else{
         dir.create(myPrivateDirPath,recursive=TRUE)
       }
+      #if(dir.exists(myPrivateDirPath)){
+	    #  unlink(myPrivateDirPath,recursive=TRUE,force=TRUE) 
+      #}
+      #dir.create(myPrivateDirPath,recursive=TRUE)
       private$oldwd<-setwd(myPrivateDirPath)
     }
   )
