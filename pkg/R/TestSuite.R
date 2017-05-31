@@ -35,7 +35,10 @@ TestSuite<- R6Class("TestSuite",
     #----------------------------
     run=function(pr=NULL){
       if(.Platform$OS.type!="unix"){
-      n<-1}else{n<-2*detectCores()}
+          n<-1
+        } else{
+          n<-2*detectCores()
+        }
       resultList<-mclapply(
         private$tests,
         mc.cores=n,
