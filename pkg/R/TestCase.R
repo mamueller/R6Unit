@@ -13,18 +13,24 @@ get_suite=function(cls){
 
 TestCase<- R6Class("TestCase",
   private=list(
+    resourceDir=NULL
+    ,
     res=NULL
     ,
     cmsg=NULL
     ,
     cout=NULL
     ,
+    msg=NULL
+    ,
+    out=NULL
+    ,
     oldWarn=NULL
     ,
     #----------------------------
     initIO=function() {
-        private$cmsg<-textConnection("msg","w")
-        private$cout<-textConnection("out","w")
+        private$cmsg<-file(open="w+")
+        private$cout<-file(open="w+")
         sink(private$cmsg,type="message")
         sink(private$cout,type="output")
 
@@ -36,15 +42,20 @@ TestCase<- R6Class("TestCase",
     ,
     #----------------------------
     restore=function(){
+      private$out <- readLines(private$cout) 
+      private$msg<- readLines(private$cmsg) 
       sink(type="output")
       sink(type="message")
       close(private$cout)
       close(private$cmsg)
+
       options(warn=private$oldWarn)
     }
     ,
     #----------------------------
     run_code=function(sr,funToTest){
+      cmsg <- private$cmsg
+      cout <- private$cout
 		  setupTiming<-tryCatch(
           self$setUp(),
           error=function(err){
@@ -54,18 +65,19 @@ TestCase<- R6Class("TestCase",
       )
       if (inherits(setupTiming, "simpleError")) { 
         sr$set_error() 
-        msg<-paste(msg,"error in setUp", toString(setupTiming))
+        msg<-append(private$msg,c("error in setUp",toString(setupTiming)))
       }else{
-        sr$add_message(msg)
 		    timing<-tryCatch(
             funToTest()
             ,error=function(err){return(err)}
             ,finally=private$restore()
         )
-        sr$add_output(out)
+        msg <- private$msg
+        sr$add_output(private$out)
+        
         if (inherits(timing, "simpleError")) { 
           sr$set_error() 
-          msg<-paste(msg,timing)
+          msg<-append(msg,toString(timing))
         }
         sr$add_message(msg)
       }
@@ -73,9 +85,17 @@ TestCase<- R6Class("TestCase",
   )
   ,
   public = list(
-    name = NULL,
+    name = NULL
+    ,
+    Io_tmp="IoTestResults_tmp"
+    ,
     initialize = function(testMethodName) {
         self$name <- testMethodName
+    }
+    ,
+    #----------------------------
+    getResourceDir=function(){
+      private$resourceDir
     }
     ,
     #----------------------------

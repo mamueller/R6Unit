@@ -49,6 +49,38 @@ TestTestCase<-R6Class("TestTestCase",
     }
     ,
 		#--------------------------------------------
+		test.resourceDir=function(){
+      # create a test_resources directory
+      testResourceDir <- file.path(self$Io_tmp,'testResources')
+      if(!dir.exists(testResourceDir)){
+        dir.create(testResourceDir,recursive=TRUE)
+      }
+      content="swimming"
+      fn="myPersonalTestFile"
+      fp=file.path(testResourceDir,fn)
+      print(fp)
+      write(content,file=fp)
+      ReadingTest<-R6Class("ReadingTest",
+      	inherit=TestCase,
+      	public=list(
+          test.readFromResources=function(){
+            rd <- self.getResourceDir()
+            print(rd)
+            fn <- "myPersonalTestFile"
+            fp <- file.path(rd,fn)
+            print(readLines(fp)[[1]])  
+            
+          }
+        )
+      )
+      tc <-ReadingTest$new('test.readFromResources')
+			sr<-tc$get_SingleTestResult()
+      #l<-sr$get_output()
+      #print(l)
+
+		}
+    ,
+		#--------------------------------------------
 		test.setUp=function(){
     # make sure that the output of the setUp FUnction is there
     setupMsg='in_setUp'
@@ -73,17 +105,22 @@ TestTestCase<-R6Class("TestTestCase",
 # check if the file is sourced or directly executed
 if(is.null(sys.calls()[[sys.nframe()-1]])){
   print("################ hello ####################")
-  tr=TestResults$new()
-  tc=TestTestCase$new("test.nError")
-  tc$run(tr)
-  tc=TestTestCase$new("test.nFail")
-  tc$run(tr)
-  tc=TestTestCase$new("test.nRun")
-  tc$run(tr)
-  tc=TestTestCase$new("test.Output")
-  tc$run(tr)
+  s=get_suite_from_file(get_Rscript_filename())
+  s$parallel <- 1 
+  tr<-s$run()
   tr$summary()
-}
+  }
+#  tr=TestResults$new()
+#  tc=TestTestCase$new("test.nError")
+#  tc$run(tr)
+#  tc=TestTestCase$new("test.nFail")
+#  tc$run(tr)
+#  tc=TestTestCase$new("test.nRun")
+#  tc$run(tr)
+#  tc=TestTestCase$new("test.Output")
+#  tc$run(tr)
+#  tr$summary()
+#}
 #tc1=FishyTest$new("test.blubber")
 #tc1$run(tr)
 #tc2=FishyTest$new("test.swimm")

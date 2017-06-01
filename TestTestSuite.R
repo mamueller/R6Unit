@@ -2,6 +2,7 @@
 # vim:set ff=unix expandtab ts=2 sw=2:
 #source("sourceR6Unit.R")
 require(R6Unit)
+require(getopt)
 source("FishyTest.R")
 TestTestSuite<-R6Class("TestTestSuite",
 	inherit=TestCase,
@@ -51,3 +52,10 @@ TestTestSuite<-R6Class("TestTestSuite",
     }
   )
 )
+############################################ 
+if(is.null(sys.calls()[[sys.nframe()-1]])){
+  s=get_suite_from_file(get_Rscript_filename())
+  s$parallel <- 1 
+  tr<-s$run()
+  tr$summary()
+}

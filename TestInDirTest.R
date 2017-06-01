@@ -5,7 +5,7 @@ TestInDirTest<-R6Class("TestInDirTest",
 	inherit=TestCase,
 	public=list(
     #------------------------
-	  test.get_SingleTestResult=function(){
+	  test.writeInDir=function(){
       # create a small TestClass that tests some IO code
       IoTest<-R6Class("IoTest",
       	inherit=InDirTest,
@@ -74,53 +74,13 @@ TestInDirTest<-R6Class("TestInDirTest",
       sr<-iot$get_SingleTestResult()
       self$assertEqual(sr$has_error(),TRUE)
     }
-    #,
-    ##------------------------
-	  #test.workingInDirSetUp=function(){
-    #  IoTest3<-R6Class("IoTest3",
-    #    inherit=InDirTest,
-    #    public=list(
-    #      #inDirSetUp=function(){
-    #      setUp=function(){
-    #        print("######## everything is fine #############")
-    #      }
-    #      ,
-    #      ####
-    #      test.somethingThatNeverFails=function(){
-    #        self$assertTrue(TRUE)
-    #      }
-    #    )
-    #  )
-    #  iot<-IoTest3$new("test.somethingThatNeverFails")
-    #  sr<-iot$get_SingleTestResult()
-    #  self$assertEqual(sr$has_error(),FALSE)
-    #}
-    #,
-    ##------------------------
-	  #test.failingInDirSetUp=function(){
-    #  IoTest4<-R6Class("IoTest4",
-    #    inherit=InDirTest,
-    #    public=list(
-    #      setUp=function(){
-    #        stop("an error in inDirSetUp")
-    #      }
-    #      ,
-    #      ####
-    #      test.somethingThatNeverFails=function(){
-    #        self$assertTrue(TRUE)
-    #      }
-    #    )
-    #  )
-    #  iot<-IoTest4$new("test.somethingThatNeverFails")
-    #  sr<-iot$get_SingleTestResult()
-    #  self$assertEqual(sr$has_error(),TRUE)
-    #}
   )
 )
 
 # check if the file is sourced or directly executed
 if(is.null(sys.calls()[[sys.nframe()-1]])){
   s<-get_suite(TestInDirTest)
+  s$parallel <- 1
   tr<-s$run()
   tr$summary()
 }
