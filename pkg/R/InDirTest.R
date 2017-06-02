@@ -13,9 +13,11 @@ InDirTest<- R6Class("InDirTest",
     ,
     oldwd=NULL
     ,
-    oldLibPath=NULL
+    oldLibPaths=NULL
     ,
-    newLibPath=NULL
+    oldMode='755' 
+    ,
+    userLibPath=NULL
     ,
     #----------------------------
     myDirPath=function(){
@@ -26,7 +28,8 @@ InDirTest<- R6Class("InDirTest",
     restore=function(){
       super$restore()
 
-      .libPaths(private$oldLibPath)
+      .libPaths(private$oldLibPaths)
+      Sys.chmod(private$userLibPath,mode=private$oldMode)
       #unlink(private$newLibPath,recursive=TRUE,force=TRUE)
       setwd(private$oldwd)
     }
@@ -44,29 +47,44 @@ InDirTest<- R6Class("InDirTest",
       }
       # change into the private Dir
       private$oldwd<-setwd(private$myDirPath())
+      
+      # create a testspecific library
       myLib <- 'lib'
       dir.create(myLib,recursive=TRUE)
-      op <- .libPaths()
-      private$oldLibPath <- op
-      # copy the libraries except the system lib 
-      # into one new libary dir.
-      # Since .libPaths(nes) does not change the system library 
-      # as the last entry we do not have to copy its contents.
-      # It will remain as the last entry in the changed .libPaths vector anyway.
-      #
-      # We copy the contents of the libDirs  in reversed order 
-      # since the same package might be installed in different places
-      # and library will take the first location if not explicitly instructed otherwise
-      # If we copy both instances into our private lib the one first on the search path will be copied
-      # last (and overwrite) the one further back in the search path.
 
-      for (lp in rev(head(op,length(op)-1))){
-        for (pd in list.dirs(lp)){
-          file.copy(pd,myLib,recursive=TRUE)
-        }
-      }
-      .libPaths(myLib)
-      private$newLibPath <- .libPaths()
+      oldLibPaths <- .libPaths()
+
+      private$oldLibPaths <- oldLibPaths
+      userLibPath <- oldLibPaths[[1]]
+      print(userLibPath)
+      private$userLibPath <- userLibPath
+      # make the users lib paht read only
+      #private$oldMode <- file.mode(private$userLibPath)
+      Sys.chmod(userLibPath,mode='555')
+      # add the tests lib to the front of the .libpath
+      newLibPaths <- append(myLib,oldLibPaths)
+      .libPaths(newLibPaths)
+      newLibPaths <- .libPaths()
+
+      ## copy the libraries except the system lib 
+      ## into one new libary dir.
+      ## Since .libPaths(nes) does not change the system library 
+      ## as the last entry we do not have to copy its contents.
+      ## It will remain as the last entry in the changed .libPaths vector anyway.
+      ##
+      ## We copy the contents of the libDirs  in reversed order 
+      ## since the same package might be installed in different places
+      ## and library will take the first location if not explicitly instructed otherwise
+      ## If we copy both instances into our private lib the one first on the search path will be copied
+      ## last (and overwrite) the one further back in the search path.
+
+      #for (lp in rev(head(oldLibPaths,length(oldLibPaths)-1))){
+      #  for (pd in list.dirs(lp)){
+      #    file.copy(pd,myLib,recursive=TRUE)
+      #  }
+      #}
+      #.libPaths(myLib)
+      #private$newLibPath <- .libPaths()
     }
   )
 )
