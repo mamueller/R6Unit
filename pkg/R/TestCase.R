@@ -13,8 +13,6 @@ get_suite=function(cls){
 
 TestCase<- R6Class("TestCase",
   private=list(
-    resourceDir=NULL
-    ,
     res=NULL
     ,
     cmsg=NULL
@@ -87,15 +85,20 @@ TestCase<- R6Class("TestCase",
   public = list(
     name = NULL
     ,
+    # The resource Dir Path will be interpreted relative to the directory
+    # where the Test is run.
+    # If you have a nested directories with tests it could be in the top level
+    # directory.
+    # In that case you would either have to run the testsuites always from there
+    # or if you want to execute them separately you could provide symlinks
+    # in the subdirectories.
+    # You can easily overload the actual path when inheriting from this class
+    resourceDirPath='R6UnitTestResources'
+    ,
     Io_tmp="IoTestResults_tmp"
     ,
     initialize = function(testMethodName) {
         self$name <- testMethodName
-    }
-    ,
-    #----------------------------
-    getResourceDir=function(){
-      private$resourceDir
     }
     ,
     #----------------------------

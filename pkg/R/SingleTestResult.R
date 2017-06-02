@@ -26,7 +26,11 @@ SingleTestResult<-R6Class("SingleTestResult",
       private$output<-output
     }
     ,
-    get_output=function(output){
+    get_messages=function(){
+      private$messages
+    }
+    ,
+    get_output=function(){
       private$output
     }
     ,

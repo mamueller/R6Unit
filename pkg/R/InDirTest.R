@@ -27,7 +27,7 @@ InDirTest<- R6Class("InDirTest",
       super$restore()
 
       .libPaths(private$oldLibPath)
-      unlink(private$newLibPath,recursive=TRUE,force=TRUE)
+      #unlink(private$newLibPath,recursive=TRUE,force=TRUE)
       setwd(private$oldwd)
     }
     ,
@@ -46,7 +46,8 @@ InDirTest<- R6Class("InDirTest",
       private$oldwd<-setwd(private$myDirPath())
       myLib <- 'lib'
       dir.create(myLib,recursive=TRUE)
-      private$oldLibPath <- .libPaths()
+      op <- .libPaths()
+      private$oldLibPath <- op
       # copy the libraries except the system lib 
       # into one new libary dir.
       # Since .libPaths(nes) does not change the system library 
@@ -59,11 +60,11 @@ InDirTest<- R6Class("InDirTest",
       # If we copy both instances into our private lib the one first on the search path will be copied
       # last (and overwrite) the one further back in the search path.
 
-      #for (lp in rev(head(op,length(op)-1))){
-      #  for (pd in list.dirs(lp)){
-      #    file.copy(pd,myLib,recursive=TRUE)
-      #  }
-      #}
+      for (lp in rev(head(op,length(op)-1))){
+        for (pd in list.dirs(lp)){
+          file.copy(pd,myLib,recursive=TRUE)
+        }
+      }
       .libPaths(myLib)
       private$newLibPath <- .libPaths()
     }

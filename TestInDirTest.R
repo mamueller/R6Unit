@@ -80,7 +80,7 @@ TestInDirTest<-R6Class("TestInDirTest",
 # check if the file is sourced or directly executed
 if(is.null(sys.calls()[[sys.nframe()-1]])){
   s<-get_suite(TestInDirTest)
-  s$parallel <- 1
+  #s$parallel <- 1
   tr<-s$run()
   tr$summary()
 }

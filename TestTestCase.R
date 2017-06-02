@@ -51,32 +51,36 @@ TestTestCase<-R6Class("TestTestCase",
 		#--------------------------------------------
 		test.resourceDir=function(){
       # create a test_resources directory
-      testResourceDir <- file.path(self$Io_tmp,'testResources')
+      testResourceDir <- self$resourceDirPath
       if(!dir.exists(testResourceDir)){
         dir.create(testResourceDir,recursive=TRUE)
       }
       content="swimming"
       fn="myPersonalTestFile"
       fp=file.path(testResourceDir,fn)
-      print(fp)
       write(content,file=fp)
       ReadingTest<-R6Class("ReadingTest",
       	inherit=TestCase,
       	public=list(
+		      #--------------------------------------------
           test.readFromResources=function(){
-            rd <- self.getResourceDir()
-            print(rd)
+            rd <- self$resourceDirPath
             fn <- "myPersonalTestFile"
             fp <- file.path(rd,fn)
-            print(readLines(fp)[[1]])  
+            cat(toString(readLines(fp)[[1]]))  
             
           }
         )
       )
       tc <-ReadingTest$new('test.readFromResources')
 			sr<-tc$get_SingleTestResult()
-      #l<-sr$get_output()
-      #print(l)
+      l<-sr$get_output()
+      print(class(l))
+      print(l)
+      self$assertTrue(l==content)
+      #m<-sr$get_messages()
+      #sr$summary()
+      #print(m)
 
 		}
     ,
