@@ -1,4 +1,5 @@
 #!/usr/bin/Rscript
+# this variant is more explicit with respect from which process it reads
 require(devtools)
 require(R6)
 A <- R6Class('A',public=list(error=0,failures=0))
@@ -12,16 +13,17 @@ testfunc <- function(){
 }
 
 
-#exported_package_func 
 
 p <- parallel:::mcfork()
+# in the parent p is of type childProcess
+# in the child p is of type masterProcess
 if (inherits(p, "masterProcess")) {
     cat("I'm a child! ", Sys.getpid(), "\n")
     parallel:::sendMaster(testfunc())
     parallel:::mcexit(,"I was a child")
 }
 cat("I'm the master\n")
-a <- unserialize(parallel:::readChildren(1000))
+a <- unserialize(parallel:::readChild(p))
 print(a)
 
 res <- tryCatch(

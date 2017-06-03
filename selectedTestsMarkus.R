@@ -4,7 +4,7 @@
 #source("R6_prolog.R")
 require(R6Unit)
 source("TestInDirTest.R")
-t2 <- PackageTests_3$new('test.writeInDir')
+t2 <- TestInDirTest$new('test.writeInDir')
 #s<-TestSuite$new(list(t1,t2))
 s<-TestSuite$new(list(t2))
 #s<-TestSuite$new(list(tc))
