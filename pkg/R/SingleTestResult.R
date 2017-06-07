@@ -5,6 +5,8 @@ SingleTestResult<-R6Class("SingleTestResult",
     fullName="",
     failure=FALSE,
     error=FALSE,
+    stdErr='',
+    stdOut='',
     output="",
     messages=""
   )
@@ -16,6 +18,14 @@ SingleTestResult<-R6Class("SingleTestResult",
     ,
     get_fullName= function(){
       private$fullName
+    }
+    ,
+    add_stdErr=function(messages){
+      private$stdErr<-append(private$stdErr,messages)
+    }
+    ,
+    add_stdOut=function(messages){
+      private$stdOut<-append(private$stdOut,messages)
     }
     ,
     add_message=function(messages){

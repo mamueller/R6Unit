@@ -58,7 +58,6 @@ TestSuite<- R6Class("TestSuite",
       # mclapply will not fork if mc.cores==1
       # but have to fork even then to protect our 
       # environment from side effects of the test code.
-
       jobs <- lapply(
         private$tests,
         function(test){

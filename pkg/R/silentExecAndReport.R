@@ -1,23 +1,5 @@
 #!/usr/bin/Rscript 
 # vim:set ff=unix expandtab ts=2 sw=2:
-# This is a version of traceback_in_test_with_error.R that minimizes the time spent in sink
-# build a constructor for a condition object (S3(
-condition <- function(subclass, message, call = sys.call(-1), ...) {
-  structure(
-    class = c(subclass, "condition"),
-    list(message = message, call = call, ...)
-  )
-}
-# build a constructor for the subclass testError that also contains a callstack
-testError<- function(text,callStack) {
-  msg <- paste0("testError: ", text)
-  condition(c("testError", "error"),
-    message = msg, 
-    text = text,
-    callStack=callStack
-  )
-}
-
 silentExecAndReport <- function(testfunc){
 # this function executes testfunc()
 # and collects all its output to stdout and stderr
@@ -55,7 +37,7 @@ silentExecAndReport <- function(testfunc){
       # it is called after an error has been signaled and stop() returned
 			# and returns another error
       # we need it to recover
-			testError(text=e$message,callStack=res)
+			testError(e,callStack=res)
     },
 		finally={
       out <- readLines(cout) 
@@ -75,26 +57,3 @@ silentExecAndReport <- function(testfunc){
 	}	
 	list(result=result,error=error,stdErr=msg,stdOut=out)
 }
-
-
-# example application
-f <- function(){
-  print('output from f')
-  message('msg from f')
-  warning('warning from f')
-  3^2
-}
-f1 <- function(){
-  print('output from f1')
-  message('msg from f1')
-  warning('warning from f1')
-  f2()
-}
-f2 <- function(){
-  print('output from f2')
-  message('msg from f2')
-  warning('warning from f2')
-  stop('some error')
-}
-print(silentExecAndReport(f1)$error$callStack)
-print(silentExecAndReport(f))

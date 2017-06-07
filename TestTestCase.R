@@ -108,9 +108,9 @@ TestTestCase<-R6Class("TestTestCase",
 
 # check if the file is sourced or directly executed
 if(is.null(sys.calls()[[sys.nframe()-1]])){
-  print("################ hello ####################")
   s=get_suite_from_file(get_Rscript_filename())
   s$parallel <- 1 
+  #print(s$get_tests())
   tr<-s$run()
   tr$summary()
   }
