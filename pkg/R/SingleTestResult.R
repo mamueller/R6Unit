@@ -24,9 +24,15 @@ SingleTestResult<-R6Class("SingleTestResult",
       private$stdErr<-append(private$stdErr,messages)
     }
     ,
+
     add_stdOut=function(messages){
       private$stdOut<-append(private$stdOut,messages)
     }
+    ,
+    get_stdOut=function(){
+      private$stdOut
+    }
+    
     ,
     add_message=function(messages){
       private$messages<-messages

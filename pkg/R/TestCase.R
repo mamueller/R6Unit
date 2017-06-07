@@ -73,6 +73,7 @@ TestCase<- R6Class("TestCase",
         sr$set_error() 
         sr$add_stdErr(setupTiming$stdErr)
         sr$add_stdOut(setupTiming$stdOut)
+        sr$add_output(setupTiming$stdOut)
         msg<-append(msg,c("error in setUp",setupTiming$stdErr))
         private$restore()
         return()
@@ -90,11 +91,13 @@ TestCase<- R6Class("TestCase",
         if (!is.null(timing$error)){
         #if (inherits(timing, "simpleError")) { 
           sr$set_error() 
-          
-          msg<-append(msg,toString(timing))
+          private$restore()
+          return()
+          #msg<-append(msg,toString(timing))
         }
         sr$add_stdErr(setupTiming$stdErr)
         sr$add_stdOut(setupTiming$stdOut)
+        sr$add_output(setupTiming$stdOut)
         sr$add_message(msg)
       }
     }

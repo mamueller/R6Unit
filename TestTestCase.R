@@ -45,6 +45,9 @@ TestTestCase<-R6Class("TestTestCase",
 			tc<-FishyTest$new("test.blubber")
 			sr<-tc$get_SingleTestResult()
       l<-sr$get_output()
+      #l<-sr$get_stdOut()
+      print(l)
+
       self$assertTrue(l=="blubbering")
     }
     ,
