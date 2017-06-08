@@ -1,5 +1,6 @@
 importFrom(R6,R6Class)
 importFrom(parallel,detectCores,mclapply)
+importFrom(stringr,str_trim,str_split)
 export(
 	TestCase,
 	InDirTest,
@@ -9,5 +10,8 @@ export(
 	get_suite,
 	get_suitefromDiscoveredTestInstances,
 	get_suite_from_file,
-	myLogger
+	myLogger,
+	pp,
+	pe,
+	CompareTrimmedNonEmptyLines
 )

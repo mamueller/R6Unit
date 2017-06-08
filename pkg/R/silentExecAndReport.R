@@ -1,7 +1,7 @@
 #!/usr/bin/Rscript 
 # vim:set ff=unix expandtab ts=2 sw=2:
 
-silentExecAndReport <- function(testfunc){
+silentExecAndReport <- function(testfunc,sr){
   # this function executes testfunc()
   # and collects all its output to stdout and stderr
   # if an error occures the error is reported along with its
@@ -11,8 +11,8 @@ silentExecAndReport <- function(testfunc){
 
   cmsg<-file(open="w+")
   cout<-file(open="w+")
-  #sink(cmsg,type="message")
-  #sink(cout,type="output")
+  sink(cmsg,type="message")
+  sink(cout,type="output")
   oldWarn=getOption("warn")
   options(warn=1) # print warnings immidiately , otherwise they will be printed
   # in the toplevel, so that we cant capture them specifically for the code
@@ -42,10 +42,14 @@ silentExecAndReport <- function(testfunc){
 			testError(e,callStack=res)
     },
 		finally={
+      sink(type="output")
+      sink(type="message")
+      
+      #avoid unfinished last line for empty pseudofile hack
+      write('\n',cout) 
       out <- readLines(cout) 
+
       msg<- readLines(cmsg) 
-      #sink(type="output")
-      #sink(type="message")
      	close(cout)
       close(cmsg)
       options(warn=oldWarn)
@@ -53,9 +57,12 @@ silentExecAndReport <- function(testfunc){
 		}
 	)
 	if(inherits(ret,'testError')){
-		error <-ret
+    sr$set_error(ret)
 	}else{
-		result <- ret
+		sr$add_retVal(ret)
 	}	
-	list(result=result,error=error,stdErr=msg,stdOut=out)
+  sr$add_stdErr(msg)
+  sr$add_stdOut(out)
+  return(sr)
+	#list(result=result,error=error,stdErr=msg,stdOut=out)
 }

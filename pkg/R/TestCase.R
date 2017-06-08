@@ -27,79 +27,28 @@ TestCase<- R6Class("TestCase",
     ,
     #----------------------------
     initIO=function() {
-       # private$cmsg<-file(open="w+")
-       # private$cout<-file(open="w+")
-       # sink(private$cmsg,type="message")
-       # sink(private$cout,type="output")
-
-       # private$oldWarn=getOption("warn")
-       # options(warn=1) # print warnings immidiately , otherwise they will be printed
-       # # in the toplevel, so that we cant capture them specifically for the code
-       # # under test
+       # to be overloaded by children
     }
     ,
     #----------------------------
     restore=function(){
-      #private$out <- readLines(private$cout) 
-      #private$msg<- readLines(private$cmsg) 
-      #sink(type="output")
-      #sink(type="message")
-      #close(private$cout)
-      #close(private$cmsg)
-
-      #options(warn=private$oldWarn)
+       # to be overloaded by children
     }
     ,
     #----------------------------
     run_code=function(sr,funToTest){
-      #cmsg <- private$cmsg
-      #cout <- private$cout
-      setupTiming <- silentExecAndReport(self$setUp)
-		  #setupTiming<-tryCatch(
-      #  #withCallingHandlers(
-      #    self$setUp(),
-      #  #  error=function(e){print(sys.calls())}
-      #  #),
-      #  error=function(err){
-      #    private$restore()
-      #    return(err)
-      #  }
-      #)
-      #if (inherits(setupTiming, "simpleError")) { 
-      #  sr$set_error() 
-      #  msg<-append(private$msg,c("error in setUp",toString(setupTiming)))
+      private$initIO()
+      on.exit(private$restore())
+      
+      sr<- silentExecAndReport(self$setUp,sr)
       msg=''
-      if (!is.null(setupTiming$error)){
-        sr$set_error() 
-        sr$add_stdErr(setupTiming$stdErr)
-        sr$add_stdOut(setupTiming$stdOut)
-        sr$add_output(setupTiming$stdOut)
-        msg<-append(msg,c("error in setUp",setupTiming$stdErr))
-        private$restore()
-        return()
+      if (sr$has_error()){
+        return(sr)
       }
-     else{
-        timing <- silentExecAndReport(funToTest)
-		    #timing<-tryCatch(
-        #    funToTest()
-        #    ,error=function(err){return(err)}
-        #    ,finally=private$restore()
-        #)
-        #msg <- private$msg
-        #sr$add_output(private$out)
-        
-        if (!is.null(timing$error)){
-        #if (inherits(timing, "simpleError")) { 
-          sr$set_error() 
-          private$restore()
-          return()
-          #msg<-append(msg,toString(timing))
-        }
-        sr$add_stdErr(setupTiming$stdErr)
-        sr$add_stdOut(setupTiming$stdOut)
-        sr$add_output(setupTiming$stdOut)
-        sr$add_message(msg)
+      else{
+        sr <- silentExecAndReport(funToTest,sr)
       }
+      return(sr)
     }
   )
   ,
@@ -143,8 +92,6 @@ TestCase<- R6Class("TestCase",
       if(is.element(self$name,names(l))){
         sr$add_run(self$full_name())
         funToTest <- l[[self$name]]
-        private$initIO()
-
         private$run_code(sr,funToTest)
       }else{
         cat(paste0("method: ", self$name," does not exist.\n"))

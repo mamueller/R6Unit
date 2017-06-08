@@ -44,11 +44,12 @@ TestTestCase<-R6Class("TestTestCase",
 			#res=TestResults$new()
 			tc<-FishyTest$new("test.blubber")
 			sr<-tc$get_SingleTestResult()
-      l<-sr$get_output()
-      #l<-sr$get_stdOut()
-      print(l)
+      #l<-sr$get_output()
+      l<-sr$get_stdOut()
+      pp('l')
 
-      self$assertTrue(l=="blubbering")
+      self$assertTrue(CompareTrimmedNonEmptyLines(l,"blubbering"))
+      #self$assertTrue(l=="blubbering")
     }
     ,
 		#--------------------------------------------
@@ -70,21 +71,15 @@ TestTestCase<-R6Class("TestTestCase",
             rd <- self$resourceDirPath
             fn <- "myPersonalTestFile"
             fp <- file.path(rd,fn)
-            cat(toString(readLines(fp)[[1]]))  
-            
+            #use a conviniet way to communicate with tests
+            return(toString(readLines(fp)[[1]]))  
           }
         )
       )
       tc <-ReadingTest$new('test.readFromResources')
 			sr<-tc$get_SingleTestResult()
-      l<-sr$get_output()
-      print(class(l))
-      print(l)
-      self$assertTrue(l==content)
-      #m<-sr$get_messages()
-      #sr$summary()
-      #print(m)
-
+      sr$summary() #write log 
+      self$assertEqual(sr$get_retVal(),content)
 		}
     ,
 		#--------------------------------------------
@@ -102,8 +97,8 @@ TestTestCase<-R6Class("TestTestCase",
       )
 			tc<-FishyTestWithSetUpAndTearDown$new("test.blubber")
 			sr<-tc$get_SingleTestResult()
-      l<-sr$get_output()
-      self$assertTrue(l==paste('in_setUp','blubbering',sep=''))
+      l<-sr$get_stdOut()
+      self$assertTrue(CompareTrimmedNonEmptyLines(l,c('in_setUp','blubbering')))
     }
 	)
 )

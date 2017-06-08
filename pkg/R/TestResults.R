@@ -72,7 +72,7 @@ TestResults<-R6Class("TestResults",
       )
       #print(private$results)
       for (sr in private$results){
-        sr$summary()
+        sr$summary(tl)
       }
     }
   )
