@@ -17,6 +17,13 @@ testError<- function(text,callStack) {
     callStack=callStack
   )
 }
+summary.testError <- function(te){
+  list(
+    text=te$text,
+    message=te$message,
+    callStack=te$callStack
+  )
+}
 
 silentExecAndReport <- function(testfunc){
 # this function executes testfunc()
@@ -96,5 +103,6 @@ f2 <- function(){
   warning('warning from f2')
   stop('some error')
 }
-print(silentExecAndReport(f1)$error$callStack)
-print(silentExecAndReport(f))
+print(summary(silentExecAndReport(f1)$error))
+#print(silentExecAndReport(f1)$error$callStack)
+#print(silentExecAndReport(f))

@@ -61,7 +61,18 @@ SingleTestResult<-R6Class("SingleTestResult",
       textLines<-character()
       #prepare the output
       for(n in names(td)){
-        textLines<-c(textLines,sprintf("\n%s:=%s",n,paste(td[[n]],collapse="\n")))
+        entry <- paste((td[[n]]),collapse="\n")
+        if (n=='error'){
+          err <- td[[n]]
+          callStack <- err$callStack
+          print('################')
+          print('################')
+          print(length(callStack))
+          callStack <- callStack[20:length(callStack)]
+          #callStack <- callStack[9:length(callStack)]
+          entry <- c(entry,callStack)
+        }
+        textLines<-c(textLines,sprintf("\n%s:=%s",n,entry))
       }
       if (!is.null(sharedLogger)){
         # write on common Log
