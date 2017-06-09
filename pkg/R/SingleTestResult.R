@@ -65,9 +65,6 @@ SingleTestResult<-R6Class("SingleTestResult",
         if (n=='error'){
           err <- td[[n]]
           callStack <- err$callStack
-          print('################')
-          print('################')
-          print(length(callStack))
           callStack <- callStack[20:length(callStack)]
           #callStack <- callStack[9:length(callStack)]
           entry <- c(entry,callStack)

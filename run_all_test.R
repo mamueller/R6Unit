@@ -7,8 +7,10 @@
 #}
 #install.packages(file.path("pkg"),repo=NULL,INSTALL_opts="--with-keep.source")
 require(devtools)
-devtools::install('pkg')
+#devtools::install('pkg')
 library(R6Unit)
 s<-get_suitefromDiscoveredTestInstances(".","^Test.*.R")
 tr<-s$run()
 tr$summary()
+
+if ((tr$get_nFailures()+tr$get_nErrors())>0) stop(1)
