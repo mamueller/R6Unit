@@ -34,6 +34,11 @@ TestResults<-R6Class("TestResults",
       return(private$results[bool_inds][[1]])
     }
     ,
+    get_deactivations=function(){
+      bool_inds<-unlist(lapply(private$results,function(sr){sr$has_been_deactivated()}))
+      return(private$results[bool_inds])
+    }
+    ,
     get_failures=function(){
       bool_inds<-unlist(lapply(private$results,function(sr){sr$has_failed()}))
       return(private$results[bool_inds])
@@ -42,6 +47,11 @@ TestResults<-R6Class("TestResults",
     get_errors=function(){
       bool_inds<-unlist(lapply(private$results,function(sr){sr$has_error()}))
       return(private$results[bool_inds])
+    }
+    ,
+    get_nDeactivations=function(){
+      frs<-self$get_deactivations()
+      return(length(frs))
     }
     ,
     get_nFailures=function(){
@@ -67,6 +77,7 @@ TestResults<-R6Class("TestResults",
           ':\n',
           "test runs:\t",self$get_nRuns(),"\n",
           "failures:\t" ,self$get_nFailures(),"\n",
+          "deactivated:\t" ,self$get_nDeactivations(),"\n",
           "errors:\t\t" ,self$get_nErrors(),"\n.\n"
         )
       )

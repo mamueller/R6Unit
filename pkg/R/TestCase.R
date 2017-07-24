@@ -90,14 +90,24 @@ TestCase<- R6Class("TestCase",
       private$res<-sr    
       l=as.list(self)
       if(is.element(self$name,names(l))){
-        sr$add_run(self$full_name())
         funToTest <- l[[self$name]]
-        private$run_code(sr,funToTest)
+        fs<-formals(funToTest)
+        if(is.element('SKIP',fs)){
+          sr$set_deactivated()
+        }else{
+          sr$add_run(self$full_name())
+          private$run_code(sr,funToTest)
+        }
       }else{
         cat(paste0("method: ", self$name," does not exist.\n"))
         return(NULL)
       }
       return(sr)
+    }
+    ,
+    #----------------------------
+    DEACTIVATE= function (expr, msg = ""){
+      sr$set_deactivated()
     }
     ,
     #----------------------------

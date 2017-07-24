@@ -3,6 +3,7 @@
 SingleTestResult<-R6Class("SingleTestResult",
   private=list(
     fullName="",
+    deactivated=FALSE,
     failure=FALSE,
     error=NULL,
     stdErr='',
@@ -40,8 +41,16 @@ SingleTestResult<-R6Class("SingleTestResult",
       private$stdOut
     }
     ,
+    set_deactivated= function(){
+      private$deactivated<-TRUE
+    }
+    ,
     set_fail = function(){
       private$failure<-TRUE
+    }
+    ,
+    has_been_deactivated= function(){
+      private$deactivated
     }
     ,
     has_failed = function(){
