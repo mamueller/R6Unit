@@ -66,7 +66,8 @@ TestResults<-R6Class("TestResults",
     ,
     get_nRuns=function(){
       l<-private$results
-      return(length(l[unlist(lapply(l,function(el){!is.null(el)}))]))
+      res <- length(l[unlist(lapply(l,function(el){!is.null(el)}))])-self$get_nDeactivations()
+      return(res)
     }
     ,
     summary=function(){

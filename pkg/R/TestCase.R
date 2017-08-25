@@ -92,9 +92,12 @@ TestCase<- R6Class("TestCase",
       if(is.element(self$name,names(l))){
         funToTest <- l[[self$name]]
         fs<-formals(funToTest)
-        if(is.element('SKIP',fs)){
-          sr$set_deactivated()
-        }else{
+        if(!is.null(fs)){
+          if(is.element('SKIP',names(fs))){
+            sr$set_deactivated(self$full_name())
+          }
+        }
+        else{
           sr$add_run(self$full_name())
           private$run_code(sr,funToTest)
         }

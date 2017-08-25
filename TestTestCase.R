@@ -44,7 +44,6 @@ TestTestCase<-R6Class("TestTestCase",
 			#res=TestResults$new()
 			tc<-FishyTest$new("test.blubber")
 			sr<-tc$get_SingleTestResult()
-      #l<-sr$get_output()
       l<-sr$get_stdOut()
       pp('l')
 
@@ -100,6 +99,32 @@ TestTestCase<-R6Class("TestTestCase",
       l<-sr$get_stdOut()
       self$assertTrue(CompareTrimmedNonEmptyLines(l,c('in_setUp','blubbering')))
     }
+    ,
+		#--------------------------------------------
+		test.skip=function(){
+      TestClassWithSkippedTests<-R6Class("TestClassWithSkippedTests",
+      	inherit=TestCase
+        ,
+      	public=list(
+          test.a=function(){
+            self$assertTrue(1==1)
+          }
+          ,
+          test.b=function(SKIP){
+            self$assertTrue(1==1)
+          }
+          ,
+          test.c=function(SKIP){
+            self$assertTrue(1==1)
+          }
+      	)
+      )
+      s <- get_suite(TestClassWithSkippedTests)
+      tr <- s$run()
+      skipped <-
+      self$assertTrue( tr$get_nDeactivations()==2)
+      self$assertTrue( tr$get_nRuns()==1)
+    }
 	)
 )
 #----------------------------
@@ -110,7 +135,7 @@ if(is.null(sys.calls()[[sys.nframe()-1]])){
   s$parallel <- 1 
   #print(s$get_tests())
   tr<-s$run()
-  tr$summary()
+  #tr$summary()
   }
 #  tr=TestResults$new()
 #  tc=TestTestCase$new("test.nError")

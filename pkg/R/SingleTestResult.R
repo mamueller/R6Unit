@@ -41,8 +41,9 @@ SingleTestResult<-R6Class("SingleTestResult",
       private$stdOut
     }
     ,
-    set_deactivated= function(){
+    set_deactivated= function(fullName){
       private$deactivated<-TRUE
+      private$fullName<- fullName
     }
     ,
     set_fail = function(){
@@ -66,46 +67,46 @@ SingleTestResult<-R6Class("SingleTestResult",
     }
     ,
     summary= function(sharedLogger=NULL){
-      td<-private
-      textLines<-character()
-      #prepare the output
-      for(n in names(td)){
-        entry <- paste((td[[n]]),collapse="\n")
-        if (n=='error'){
-          err <- td[[n]]
-          callStack <- err$callStack
-          callStack <- callStack[20:length(callStack)]
-          #callStack <- callStack[9:length(callStack)]
-          entry <- c(entry,callStack)
+        td<-private
+        textLines<-character()
+        #prepare the output
+        for(n in setdiff(names(td),'retVal')){
+          entry <- paste(td[[n]],collapse="\n")
+          if (n=='error'){
+            err <- td[[n]]
+            callStack <- err$callStack
+            callStack <- callStack[20:length(callStack)]
+            #callStack <- callStack[9:length(callStack)]
+            entry <- c(entry,callStack)
+          }
+          textLines<-c(textLines,sprintf("\n%s:=%s",n,entry))
         }
-        textLines<-c(textLines,sprintf("\n%s:=%s",n,entry))
-      }
-      if (!is.null(sharedLogger)){
-        # write on common Log
-        if(self$has_failed() | self$has_error()){
-          # make sure to be verbose in case of error or failure
-          sharedLogger$error(textLines)
-        }else{
-          # otherwise only talk if loglevel is above debug
-          sharedLogger$debug(textLines)
+        if (!is.null(sharedLogger)){
+          # write on common Log
+          if(self$has_failed() | self$has_error()){
+            # make sure to be verbose in case of error or failure
+            sharedLogger$error(textLines)
+          }else{
+            # otherwise only talk if loglevel is above debug
+            sharedLogger$debug(textLines)
+          }
         }
+        # create a private logger that writes only to a private
+        # logfile and is always verbose
+        logDirName <- 'logs'
+	      if(!dir.exists(logDirName)){
+          dir.create(logDirName)
+        }
+        logFileName<-file.path('logs',private$fullName)
+        privateLogger<-myLogger(logFileName)
+        fileLogLevel<-c(FINEST=1)
+        unlink(logFileName)
+        privateLogger<-getLogger("privateTestLogger")
+        privateLogger$level<-fileLogLevel
+        privateLogger$addHandler(writeToFile,level=fileLogLevel,file=logFileName)
+        # make sure to be verbose by 
+        privateLogger$error(textLines)
       }
-      # create a private logger that writes only to a private
-      # logfile and is always verbose
-      logDirName <- 'logs'
-	    if(!dir.exists(logDirName)){
-        dir.create(logDirName)
-      }
-      logFileName<-file.path('logs',private$fullName)
-      privateLogger<-myLogger(logFileName)
-      fileLogLevel<-c(FINEST=1)
-      unlink(logFileName)
-      privateLogger<-getLogger("privateTestLogger")
-      privateLogger$level<-fileLogLevel
-      privateLogger$addHandler(writeToFile,level=fileLogLevel,file=logFileName)
-      # make sure to be verbose by 
-      privateLogger$error(textLines)
-    }
   )
 )
  
