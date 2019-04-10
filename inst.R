@@ -3,8 +3,8 @@ if (!is.element('devtools',installed.packages())){
 	install.packages('devtools',repos='https://cran.uni-muenster.de')
 }
 require(devtools)
-devtools::install('pkg')
 install.packages('stringr')
+devtools::install('pkg')
 require(getopt)
 require(stringr)
 print(get_Rscript_filename())
