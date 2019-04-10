@@ -2,6 +2,7 @@ language: r
 before_install:
         - sudo apt-get update
         - sudo apt-get install libssl-de
+        - sudo apt-get install libcurl4-openssl-dev
 install: ./travis_install_dependencies.sh
 script: ./travis_run_tests.sh 
 
