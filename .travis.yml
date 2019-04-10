@@ -1,0 +1,2 @@
+language: R
+script: run_travis_tests.sh 
