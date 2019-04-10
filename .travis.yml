@@ -1,4 +1,7 @@
 language: r
+before_install:
+        - sudo apt-get update
+        - sudo apt-get install libssl-de
 install: ./travis_install_dependencies.sh
 script: ./travis_run_tests.sh 
 
