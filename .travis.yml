@@ -1,2 +1,4 @@
-language: R
-script: run_travis_tests.sh 
+language: r
+install: ./travis_install_dependencies.sh
+script: ./travis_run_tests.sh 
+
