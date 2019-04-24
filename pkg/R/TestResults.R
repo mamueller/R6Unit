@@ -71,18 +71,23 @@ TestResults<-R6Class("TestResults",
     }
     ,
     summary=function(){
+
       logFileName<-"test.log"
       tl<-myLogger(logFileName)
       tl$info(
         paste0(
           ':\n',
           "test runs:\t",self$get_nRuns(),"\n",
-          "failures:\t" ,self$get_nFailures(),"\n",
+          "n failures:\t" ,self$get_nFailures(),"\n",
           "deactivated:\t" ,self$get_nDeactivations(),"\n",
-          "errors:\t\t" ,self$get_nErrors(),"\n.\n"
+          "n errors:\t\t" ,self$get_nErrors(),"\n.\n"
         )
       )
       #print(private$results)
+      tl$info('Tests with errors')
+      for (sr in self$get_errors()){
+        tl$info(sr$get_fullName())
+      }
       for (sr in private$results){
         sr$summary(tl)
       }
