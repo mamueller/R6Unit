@@ -65,6 +65,7 @@ TestSuite<- R6Class("TestSuite",
         }
       )
       resultList <- mccollect(jobs)
+      #resultList <- lapply(private$tests,function(test){test$get_SingleTestResult()}) 
       tr<-TestResults$new(resultList)
       if(!is.null(pr)){
         cpr=pr$clone(deep=TRUE)
