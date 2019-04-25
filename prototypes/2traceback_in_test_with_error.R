@@ -103,6 +103,6 @@ f2 <- function(){
   warning('warning from f2')
   stop('some error')
 }
-print(summary(silentExecAndReport(f1)$error))
+#print(summary(silentExecAndReport(f1)$error))
 #print(silentExecAndReport(f1)$error$callStack)
-#print(silentExecAndReport(f))
+print(summary(silentExecAndReport(f2)$error))

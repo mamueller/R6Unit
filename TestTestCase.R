@@ -38,6 +38,22 @@ TestTestCase<-R6Class("TestTestCase",
 		}
     ,
 		#--------------------------------------------
+		test.ErrorOutput=function(){
+    # make sure that the output of the running code is
+    # not lost but saved in the TestResults object
+			#res=TestResults$new()
+			tc<-FishyTest$new("test.error")
+			sr<-tc$get_SingleTestResult()
+      so<-sr$get_stdOut()
+      se<-sr$get_error()
+      print(se$orgText)
+      print(sr$summary_string())
+
+      #self$assertTrue(CompareTrimmedNonEmptyLines(l,"an erroneous method"))
+      #self$assertTrue(l=="blubbering")
+    }
+    ,
+		#--------------------------------------------
 		test.Output=function(){
     # make sure that the output of the running code is
     # not lost but saved in the TestResults object

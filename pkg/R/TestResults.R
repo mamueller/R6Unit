@@ -84,9 +84,11 @@ TestResults<-R6Class("TestResults",
         )
       )
       #print(private$results)
-      tl$info('Tests with errors')
-      for (sr in self$get_errors()){
-        tl$info(sr$get_fullName())
+      if (self$get_nErrors()>0){
+        tl$info('Tests with errors')
+        for (sr in self$get_errors()){
+          tl$info(sr$get_fullName())
+        }
       }
       for (sr in private$results){
         sr$summary(tl)

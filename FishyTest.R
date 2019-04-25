@@ -14,7 +14,8 @@ FishyTest<-R6Class("FishyTest",
 		} 
     , 
 		test.error=function(){
-		   stop("an erroneous method")
+       print('an error is about to occure.')
+		   stop("an error did occure")
 		} 
     ,
 		test.fail=function(){

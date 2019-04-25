@@ -3,18 +3,15 @@
 
 silentExecAndReport <- function(testfunc,sr){
   # this function executes testfunc()
-  # and collects all its output to stdout and stderr
+  # and collects all its output to stdout 
   # if an error occures the error is reported along with its
   # messages and the callstack
   # if testfunc() returns a value this is stored 
-  # this function returns a list
 
-  cmsg<-file(open="w+")
   cout<-file(open="w+")
-  sink(cmsg,type="message")
   sink(cout,type="output")
   oldWarn=getOption("warn")
-  options(warn=1) # print warnings immidiately , otherwise they will be printed
+  #options(warn=1) # print warnings immidiately , otherwise they will be printed
   # in the toplevel, so that we cant capture them specifically for the code
   # under test
   
@@ -39,19 +36,18 @@ silentExecAndReport <- function(testfunc,sr){
       # it is called after an error has been signaled and stop() returned
 			# and returns another error
       # we need it to recover
+      print('in tryCatch error #############')
+      print(e)
 			testError(e,callStack=res)
     },
 		finally={
-      sink(type="output")
-      sink(type="message")
       
       #avoid unfinished last line for empty pseudofile hack
       write('\n',cout) 
       out <- readLines(cout) 
 
-      msg<- readLines(cmsg) 
+      sink(type="output")
      	close(cout)
-      close(cmsg)
       options(warn=oldWarn)
 		
 		}
@@ -61,7 +57,7 @@ silentExecAndReport <- function(testfunc,sr){
 	}else{
 		sr$add_retVal(ret)
 	}	
-  sr$add_stdErr(msg)
+  #sr$add_stdErr(msg)
   sr$add_stdOut(out)
   return(sr)
 	#list(result=result,error=error,stdErr=msg,stdOut=out)

@@ -20,8 +20,8 @@ SingleTestResult<-R6Class("SingleTestResult",
       private$fullName
     }
     ,
-    add_stdErr=function(messages){
-      private$stdErr<-append(private$stdErr,messages)
+    get_error= function(){
+      private$error
     }
     ,
     add_retVal=function(messages){
@@ -66,7 +66,7 @@ SingleTestResult<-R6Class("SingleTestResult",
       !is.null(private$error)
     }
     ,
-    summary= function(sharedLogger=NULL){
+    summary_string = function(){
         td<-private
         textLines<-character()
         #prepare the output
@@ -81,6 +81,11 @@ SingleTestResult<-R6Class("SingleTestResult",
           }
           textLines<-c(textLines,sprintf("\n%s:=%s",n,entry))
         }
+        return(textLines)
+    }
+    ,
+    summary= function(sharedLogger=NULL){
+        textLines = self$summary_string()
         if (!is.null(sharedLogger)){
           # write on common Log
           if(self$has_failed() | self$has_error()){
