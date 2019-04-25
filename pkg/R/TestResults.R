@@ -89,10 +89,17 @@ TestResults<-R6Class("TestResults",
         for (sr in self$get_errors()){
           tl$info(sr$get_fullName())
         }
+        for (sr in self$get_errors()){
+          err=sr$get_error()
+          tl$error(err$message)
+          tl$error(err$text)
+          tl$error(err$callStack)
+          tl$error(sr$summary_string())
+        }
       }
-      for (sr in private$results){
-        sr$summary(tl)
-      }
+      #for (sr in private$results){
+      #  sr$summary(tl)
+      #}
     }
   )
 )

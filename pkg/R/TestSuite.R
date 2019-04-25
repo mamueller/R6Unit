@@ -38,34 +38,26 @@ TestSuite<- R6Class("TestSuite",
     #----------------------------
     run=function(pr=NULL){
       n<-min(detectCores(),length(private$tests))
-      if(.Platform$OS.type!="unix"){
-        n <- 1
-      } 
-      if(!is.null(self$parallel)){
+      if(!is.null(self$parallel) & .Platform$OS.type=="unix"){
         n <- self$parallel
       }
-      print(n)
-      #resultList<-mclapply(
-      #  private$tests,
-      #  mc.cores=n,
-      #  function(test){
-      #    return(test$get_SingleTestResult())
-      #  }
-      #)
       # we implement a simpler version of 
       # mclapply here, since we have to make
       # sure that a subprocess is forked for >>every<< test
       # mclapply will not fork if mc.cores==1
       # but have to fork even then to protect our 
       # environment from side effects of the test code.
-      jobs <- lapply(
-        private$tests,
-        function(test){
-          mcparallel(test$get_SingleTestResult())
-        }
-      )
-      resultList <- mccollect(jobs)
-      #resultList <- lapply(private$tests,function(test){test$get_SingleTestResult()}) 
+      if (is.null(self$parallel)){
+        resultList <- lapply(private$tests,function(test){test$get_SingleTestResult()}) 
+      }else{
+        jobs <- lapply(
+          private$tests,
+          function(test){
+            mcparallel(test$get_SingleTestResult())
+          }
+        )
+        resultList <- mccollect(jobs)
+      }
       tr<-TestResults$new(resultList)
       if(!is.null(pr)){
         cpr=pr$clone(deep=TRUE)

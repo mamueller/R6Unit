@@ -7,7 +7,7 @@ myLogger<-function(logFileName){
   unlink(logFileName)
   tl<-getLogger("TestLogger")
   tl$level<-fileLogLevel
-  tl$addHandler(writeToConsole, level=consoleLogLevel)
+  #tl$addHandler(writeToConsole, level=consoleLogLevel)
   tl$addHandler(writeToFile,level=fileLogLevel,file=logFileName)
   return(tl)
 }

@@ -29,7 +29,7 @@ InDirTest<- R6Class("InDirTest",
       super$restore()
 
       .libPaths(private$oldLibPaths)
-      Sys.chmod(private$userLibPath,mode=private$oldMode)
+      #Sys.chmod(private$userLibPath,mode=private$oldMode)
       #unlink(private$newLibPath,recursive=TRUE,force=TRUE)
       setwd(private$oldwd)
     }
@@ -56,17 +56,16 @@ InDirTest<- R6Class("InDirTest",
 
       private$oldLibPaths <- oldLibPaths
       userLibPath <- oldLibPaths[[1]]
-      print("############# old userLibPath")
       print(userLibPath)
       private$userLibPath <- userLibPath
       # make the users lib paht read only
-      private$oldMode <- file.mode(private$userLibPath)
-      Sys.chmod(userLibPath,mode='555')
+      #private$oldMode <- file.mode(private$userLibPath)
+      #Sys.chmod(userLibPath,mode='555')
       ## add the tests lib to the front of the .libpath
       newLibPaths <- append(myLib,oldLibPaths)
-      #.libPaths(newLibPaths)
-      #newLibPaths <- .libPaths()
-      print("######################3 newLibPaths")
+      .libPaths(newLibPaths)
+      print("############# new LibPath")
+      print(.libPaths())
 
       ## copy the libraries except the system lib 
       ## into one new libary dir.
