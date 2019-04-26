@@ -8,16 +8,6 @@ TestTestSuite<-R6Class("TestTestSuite",
 	inherit=TestCase,
 	public=list(
     #-----------------------------------
-		test.suite_parallel=function(){
-			tb=FishyTest$new("test.blubber")
-			ts=FishyTest$new("test.swimm")
-      # second way, initilize from list
-      s<-TestSuite$new(list(tb,ts))
-      s$parallel=2
-      rl1<-s$run()
-    }
-    ,
-    #-----------------------------------
 		test.suite_initialization=function(){
 			tb=FishyTest$new("test.blubber")
 			ts=FishyTest$new("test.swimm")
@@ -60,6 +50,16 @@ TestTestSuite<-R6Class("TestTestSuite",
     
 
     }
+    #-----------------------------------
+		test.suite_parallel=function(){
+			tb=FishyTest$new("test.blubber")
+			ts=FishyTest$new("test.swimm")
+      # second way, initilize from list
+      s<-TestSuite$new(list(tb,ts))
+      s$parallel=2
+      rl1<-s$run()
+    }
+    ,
   )
 )
 ############################################ 
