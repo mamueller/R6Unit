@@ -46,10 +46,8 @@ TestTestSuite<-R6Class("TestTestSuite",
     s2<-get_suite(FishyTest)
     s1$add_suite(s2)
     self$assertEqual(refnames,s1$test_names())
-
-    
-
     }
+    ,
     #-----------------------------------
 		test.suite_parallel=function(){
 			tb=FishyTest$new("test.blubber")
@@ -59,7 +57,6 @@ TestTestSuite<-R6Class("TestTestSuite",
       s$parallel=2
       rl1<-s$run()
     }
-    ,
   )
 )
 ############################################ 

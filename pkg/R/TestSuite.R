@@ -49,7 +49,7 @@ TestSuite<- R6Class("TestSuite",
         # environment from side effects of the test code.
         n<-min(detectCores(),length(private$tests))
         cl<-makePSOCKcluster(n)
-        clusterApply(private$tests,function(test({test$get_SingleTestResult()}))
+        resultList <- clusterApply(cl,private$tests,function(test){test$get_SingleTestResult()})
         #jobs <- lapply(
         #  private$tests,
         #  function(test){
