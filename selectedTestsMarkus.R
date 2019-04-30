@@ -15,4 +15,4 @@ print(s$test_names())
 tr <- s$run()
 #stop(mmsg())
 
-tr$summary()
+cat(tr$summary_string())

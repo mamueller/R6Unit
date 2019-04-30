@@ -66,7 +66,7 @@ SingleTestResult<-R6Class("SingleTestResult",
       !is.null(private$error)
     }
     ,
-    summary_string = function(){
+    summary= function(){
         td<-private
         textLines<-character()
         #prepare the output
@@ -83,35 +83,35 @@ SingleTestResult<-R6Class("SingleTestResult",
         }
         return(textLines)
     }
-    ,
-    summary= function(sharedLogger=NULL){
-        textLines = self$summary_string()
-        if (!is.null(sharedLogger)){
-          # write on common Log
-          if(self$has_failed() | self$has_error()){
-            # make sure to be verbose in case of error or failure
-            sharedLogger$error(textLines)
-          }else{
-            # otherwise only talk if loglevel is above debug
-            sharedLogger$debug(textLines)
-          }
-        }
-        # create a private logger that writes only to a private
-        # logfile and is always verbose
-        logDirName <- 'logs'
-	      if(!dir.exists(logDirName)){
-          dir.create(logDirName)
-        }
-        logFileName<-file.path('logs',private$fullName)
-        privateLogger<-myLogger(logFileName)
-        fileLogLevel<-c(FINEST=1)
-        unlink(logFileName)
-        privateLogger<-getLogger("privateTestLogger")
-        privateLogger$level<-fileLogLevel
-        privateLogger$addHandler(writeToFile,level=fileLogLevel,file=logFileName)
-        # make sure to be verbose by 
-        privateLogger$error(textLines)
-      }
+    #,
+    #summary= function(sharedLogger=NULL){
+    #    textLines = self$summary()
+    #    if (!is.null(sharedLogger)){
+    #      # write on common Log
+    #      if(self$has_failed() | self$has_error()){
+    #        # make sure to be verbose in case of error or failure
+    #        sharedLogger$error(textLines)
+    #      }else{
+    #        # otherwise only talk if loglevel is above debug
+    #        sharedLogger$debug(textLines)
+    #      }
+    #    }
+    #    # create a private logger that writes only to a private
+    #    # logfile and is always verbose
+    #    logDirName <- 'logs'
+	  #    if(!dir.exists(logDirName)){
+    #      dir.create(logDirName)
+    #    }
+    #    logFileName<-file.path('logs',private$fullName)
+    #    privateLogger<-myLogger(logFileName)
+    #    fileLogLevel<-c(FINEST=1)
+    #    unlink(logFileName)
+    #    privateLogger<-getLogger("privateTestLogger")
+    #    privateLogger$level<-fileLogLevel
+    #    privateLogger$addHandler(writeToFile,level=fileLogLevel,file=logFileName)
+    #    # make sure to be verbose by 
+    #    privateLogger$error(textLines)
+    #}
   )
 )
  

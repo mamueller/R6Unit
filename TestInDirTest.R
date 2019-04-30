@@ -82,5 +82,5 @@ if(is.null(sys.calls()[[sys.nframe()-1]])){
   s<-get_suite(TestInDirTest)
   #s$parallel <- 1
   tr<-s$run()
-  tr$summary()
+  cat(tr$summary())
 }

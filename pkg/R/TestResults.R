@@ -71,35 +71,56 @@ TestResults<-R6Class("TestResults",
     }
     ,
     summary=function(){
-
-      logFileName<-"test.log"
-      tl<-myLogger(logFileName)
-      tl$info(
-        paste0(
+      str=paste0(
           ':\n',
           "test runs:\t",self$get_nRuns(),"\n",
           "n failures:\t" ,self$get_nFailures(),"\n",
           "deactivated:\t" ,self$get_nDeactivations(),"\n",
           "n errors:\t\t" ,self$get_nErrors(),"\n.\n"
         )
-      )
-      #print(private$results)
       if (self$get_nErrors()>0){
-        tl$info('Tests with errors')
+        str=paste0(str,'Tests with errors')
         for (sr in self$get_errors()){
-          tl$info(sr$get_fullName())
+          str=paste0(str,sr$get_fullName())
         }
         for (sr in self$get_errors()){
           err=sr$get_error()
-          tl$error(err$message)
-          tl$error(err$text)
-          tl$error(err$callStack)
-          tl$error(sr$summary_string())
+          str=paste0(str,err$message,err$text,err$callStack,sr$summary())
         }
       }
-      #for (sr in private$results){
-      #  sr$summary(tl)
-      #}
+      return(str)
     }
+    ,
+    #log_summary=function(){
+
+    #  logFileName<-"test.log"
+    #  tl<-myLogger(logFileName)
+    #  tl$info(
+    #    paste0(
+    #      ':\n',
+    #      "test runs:\t",self$get_nRuns(),"\n",
+    #      "n failures:\t" ,self$get_nFailures(),"\n",
+    #      "deactivated:\t" ,self$get_nDeactivations(),"\n",
+    #      "n errors:\t\t" ,self$get_nErrors(),"\n.\n"
+    #    )
+    #  )
+    #  #print(private$results)
+    #  if (self$get_nErrors()>0){
+    #    tl$info('Tests with errors')
+    #    for (sr in self$get_errors()){
+    #      tl$info(sr$get_fullName())
+    #    }
+    #    for (sr in self$get_errors()){
+    #      err=sr$get_error()
+    #      tl$error(err$message)
+    #      tl$error(err$text)
+    #      tl$error(err$callStack)
+    #      tl$error(sr$summary())
+    #    }
+    #  }
+    #  #for (sr in private$results){
+    #  #  sr$summary(tl)
+    #  #}
+    #}
   )
 )

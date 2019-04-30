@@ -47,7 +47,9 @@ TestTestCase<-R6Class("TestTestCase",
       so<-sr$get_stdOut()
       se<-sr$get_error()
       print(se$orgText)
-      print(sr$summary_string())
+      print(so)
+      
+      print(sr$summary())
 
       #self$assertTrue(CompareTrimmedNonEmptyLines(l,"an erroneous method"))
       #self$assertTrue(l=="blubbering")
@@ -93,7 +95,7 @@ TestTestCase<-R6Class("TestTestCase",
       )
       tc <-ReadingTest$new('test.readFromResources')
 			sr<-tc$get_SingleTestResult()
-      sr$summary() #write log 
+      #sr$summary() #write log 
       self$assertEqual(sr$get_retVal(),content)
 		}
     ,
@@ -151,7 +153,6 @@ if(is.null(sys.calls()[[sys.nframe()-1]])){
   s$parallel <- 1 
   #print(s$get_tests())
   tr<-s$run()
-  #tr$summary()
   }
 #  tr=TestResults$new()
 #  tc=TestTestCase$new("test.nError")

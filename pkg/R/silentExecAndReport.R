@@ -36,9 +36,6 @@ silentExecAndReport <- function(testfunc,sr){
       # it is called after an error has been signaled and stop() returned
 			# and returns another error
       # we need it to recover
-      print('in tryCatch error #############')
-      print(e)
-      print(res)
 			testError(e,callStack=res)
     },
 		finally={

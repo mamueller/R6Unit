@@ -41,15 +41,15 @@ TestSuite<- R6Class("TestSuite",
         resultList <- lapply(private$tests,function(test){test$get_SingleTestResult()}) 
       }else{
         require(parallel)
+        n<-min(detectCores(),length(private$tests))
+        cl<-makePSOCKcluster(n)
+        resultList <- clusterApply(cl,private$tests,function(test){test$get_SingleTestResult()})
         # we implement a simpler version of 
         # mclapply here, since we have to make
         # sure that a subprocess is forked for >>every<< test
         # mclapply will not fork if mc.cores==1
         # but have to fork even then to protect our 
         # environment from side effects of the test code.
-        n<-min(detectCores(),length(private$tests))
-        cl<-makePSOCKcluster(n)
-        resultList <- clusterApply(cl,private$tests,function(test){test$get_SingleTestResult()})
         #jobs <- lapply(
         #  private$tests,
         #  function(test){
