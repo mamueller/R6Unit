@@ -91,6 +91,30 @@ TestResults<-R6Class("TestResults",
       return(str)
     }
     ,
+    get_names=function(){
+      res=""
+      for (sr in private$results){
+        res=paste0(res,sr$get_fullName(),"\n")
+      }
+      #res = "here should be everything collected from the tests" 
+      return(res)
+    }
+    ,
+    get_singleResult=function(name){
+      sr<-private$results[unlist(lapply(private$results,function(sr){sr$get_fullName()==name}))][[1]]
+
+      return(sr)
+    }
+    ,
+    get_stdOut=function(){
+      res=""
+      for (sr in private$results){
+        res=paste0(res,sr$get_stdOut())
+      }
+      #res = "here should be everything collected from the tests" 
+      return(res)
+    }
+    #,
     #log_summary=function(){
 
     #  logFileName<-"test.log"

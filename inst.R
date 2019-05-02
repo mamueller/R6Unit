@@ -4,7 +4,7 @@ if (!is.element('devtools',installed.packages())){
 }
 require(devtools)
 install.packages('stringr')
-devtools::install('pkg')
+devtools::install('pkg',build=FALSE)
 require(getopt)
 require(stringr)
 print(get_Rscript_filename())

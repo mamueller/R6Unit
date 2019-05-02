@@ -10,7 +10,6 @@ export(
 	get_suite,
 	get_suitefromDiscoveredTestInstances,
 	get_suite_from_file,
-	myLogger,
 	pp,
 	pe,
 	CompareTrimmedNonEmptyLines
