@@ -1,3 +1,4 @@
+[![Travis-CI Build Status](https://travis-ci.org/MPIBGC-TEE/R6Unit.svg?branch=master)](https://travis-ci.org/MPIBGC-TEE/R6Unit)
 # R6Unit
 This is small package in the way of Kent Becks original TestUnit using R6 classes in R
 I needed the posibillity to inherit from TestCase to build hirarchies of more and more specialized tests,
