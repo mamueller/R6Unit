@@ -42,6 +42,17 @@ TestSuite<- R6Class("TestSuite",
       }else{
         require(parallel)
         n<-min(detectCores(),length(private$tests))
+
+        # the next lines are supposed to make helper functions used to define tests 
+        # available to the cluster nodes
+        # by default clusterApply does not make everything available which leads to problems
+        # when a test uses an external function since the function is not available in
+        # the environment of the node.
+        # options:
+        # 1.) clusterExport(cl=cl,varlist=ls(e),env=e) 
+        #     where e should be an environment containing all objects (usually
+        #     functions) used to define the test.  
+
         cl<-makePSOCKcluster(n)
         resultList <- clusterApply(cl,private$tests,function(test){test$get_SingleTestResult()})
         # we implement a simpler version of 

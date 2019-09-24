@@ -12,5 +12,6 @@ export(
 	get_suite_from_file,
 	pp,
 	pe,
-	CompareTrimmedNonEmptyLines
+	CompareTrimmedNonEmptyLines,
+	cpDir
 )
