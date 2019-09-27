@@ -85,11 +85,11 @@ TestResults<-R6Class("TestResults",
         }
         for (sr in self$get_errors()){
           err=sr$get_error()
-          print(err$message)
+          #print(err$message)
           # print(err$callStack)
-          print(sr$get_stdOut())
+          #print(sr$get_stdOut())
           #str=paste0(str,err$message,err$text,err$callStack,sr$summary())
-          #str=paste0(str,err$message,err$text)
+          str=paste0(str,err$message,err$text)
         }
       }
       return(str)
