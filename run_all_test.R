@@ -6,9 +6,11 @@
 #  remove.packages(pkgName)
 #}
 #install.packages(file.path("pkg"),repo=NULL,INSTALL_opts="--with-keep.source")
-require(devtools)
+#require(devtools)
 #devtools::install('pkg')
-library(R6Unit)
+#library(R6Unit)
+require(pkgload)
+pkgload::load_all("pkg",export_all=FALSE)
 s<-get_suitefromDiscoveredTestInstances(".","^Test.*.R")
 tr<-s$run()
 cat(tr$summary())

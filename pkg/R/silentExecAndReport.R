@@ -27,6 +27,7 @@ silentExecAndReport <- function(testfunc,sr){
           # we need this to see the actual call stack for the erroneous code
           # which we then store (per sideeffect) in a variable of the parent env (res<<-)
 					res<<-sys.calls()
+					#res<<-NULL
 				},
 				res <- testfunc()
 		),

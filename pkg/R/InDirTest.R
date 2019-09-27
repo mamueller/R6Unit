@@ -67,24 +67,6 @@ InDirTest<- R6Class("InDirTest",
       print("############# new LibPath")
       print(.libPaths())
 
-      ## copy the libraries except the system lib 
-      ## into one new libary dir.
-      ## Since .libPaths(nes) does not change the system library 
-      ## as the last entry we do not have to copy its contents.
-      ## It will remain as the last entry in the changed .libPaths vector anyway.
-      ##
-      ## We copy the contents of the libDirs  in reversed order 
-      ## since the same package might be installed in different places
-      ## and library will take the first location if not explicitly instructed otherwise
-      ## If we copy both instances into our private lib the one first on the search path will be copied
-      ## last (and overwrite) the one further back in the search path.
-
-      #for (lp in rev(head(oldLibPaths,length(oldLibPaths)-1))){
-      #  for (pd in list.dirs(lp)){
-      #    file.copy(pd,myLib,recursive=TRUE)
-      #  }
-      #}
-      #.libPaths(myLib)
     }
   )
 )

@@ -114,6 +114,19 @@ TestCase<- R6Class("TestCase",
     }
     ,
     #----------------------------
+    assertFalse= function (expr, msg = ""){
+      sr<-private$res
+      if (missing(expr)) {
+          stop("'expr' is missing")
+      }
+      result <- eval(expr)
+      names(result) <- NULL
+      if (!identical(result, FALSE)) {
+        sr$set_fail()
+      }
+    }
+    ,
+    #----------------------------
     assertTrue= function (expr, msg = ""){
       sr<-private$res
       if (missing(expr)) {

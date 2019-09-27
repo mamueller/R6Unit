@@ -77,7 +77,8 @@ SingleTestResult<-R6Class("SingleTestResult",
             callStack <- err$callStack
             callStack <- callStack[20:length(callStack)]
             #callStack <- callStack[9:length(callStack)]
-            entry <- c(entry,callStack)
+            #entry <- c(entry,callStack)
+            entry <- c(entry,self$get_stdOut())
           }
           textLines<-c(textLines,sprintf("\n%s:=%s",n,entry))
         }

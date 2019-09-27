@@ -79,13 +79,17 @@ TestResults<-R6Class("TestResults",
           "n errors:\t\t" ,self$get_nErrors(),"\n.\n"
         )
       if (self$get_nErrors()>0){
-        str=paste0(str,'Tests with errors')
+        str=paste0(str,'Tests with errors: ')
         for (sr in self$get_errors()){
           str=paste0(str,sr$get_fullName())
         }
         for (sr in self$get_errors()){
           err=sr$get_error()
-          str=paste0(str,err$message,err$text,err$callStack,sr$summary())
+          print(err$message)
+          # print(err$callStack)
+          print(sr$get_stdOut())
+          #str=paste0(str,err$message,err$text,err$callStack,sr$summary())
+          #str=paste0(str,err$message,err$text)
         }
       }
       return(str)
