@@ -5,7 +5,7 @@
 testError<- function(orgError,callStack) {
   orgMsg <- orgError$message
   orgText<- orgError$text
-  msg <- paste0("testError: ", orgMsg)
+  msg <- c("testError: ", orgMsg)
   condition(c("testError", class(orgError),"error"),
     message = msg, 
     text = orgText,

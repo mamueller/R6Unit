@@ -71,7 +71,7 @@ TestResults<-R6Class("TestResults",
     }
     ,
     summary=function(){
-      str=paste0(
+      lines=c(
           ':\n',
           "test runs:\t",self$get_nRuns(),"\n",
           "n failures:\t" ,self$get_nFailures(),"\n",
@@ -79,29 +79,26 @@ TestResults<-R6Class("TestResults",
           "n errors:\t\t" ,self$get_nErrors(),"\n.\n"
         )
       if (self$get_nErrors()>0){
-        str=paste0(str,'Tests with errors: ')
+        lines=c(lines,'Tests with errors: ')
         for (sr in self$get_errors()){
-          str=paste0(str,sr$get_fullName())
+          lines=c(lines,sr$get_fullName())
         }
         for (sr in self$get_errors()){
-          err=sr$get_error()
-          #print(err$message)
-          # print(err$callStack)
-          #print(sr$get_stdOut())
-          #str=paste0(str,err$message,err$text,err$callStack,sr$summary())
-          str=paste0(str,err$message,err$text)
+          lines=c(lines,sr$get_fullName())
+          lines=c(lines,sr$summary())
         }
       }
-      return(str)
-    }
-    ,
-    get_names=function(){
-      res=""
-      for (sr in private$results){
-        res=paste0(res,sr$get_fullName(),"\n")
+      if (self$get_nFailures()>0){
+        lines=c(lines,'Tests with failures: ')
+        for (sr in self$get_failures()){
+          lines=c(lines,sr$get_fullName())
+        }
+        for (sr in self$get_failures()){
+          lines=c(lines,sr$get_fullName())
+          lines=c(lines,sr$summary())
+        }
       }
-      #res = "here should be everything collected from the tests" 
-      return(res)
+      return(lines)
     }
     ,
     get_singleResult=function(name){
@@ -113,42 +110,10 @@ TestResults<-R6Class("TestResults",
     get_stdOut=function(){
       res=""
       for (sr in private$results){
-        res=paste0(res,sr$get_stdOut())
+        res=c(res,sr$get_stdOut())
       }
       #res = "here should be everything collected from the tests" 
       return(res)
     }
-    #,
-    #log_summary=function(){
-
-    #  logFileName<-"test.log"
-    #  tl<-myLogger(logFileName)
-    #  tl$info(
-    #    paste0(
-    #      ':\n',
-    #      "test runs:\t",self$get_nRuns(),"\n",
-    #      "n failures:\t" ,self$get_nFailures(),"\n",
-    #      "deactivated:\t" ,self$get_nDeactivations(),"\n",
-    #      "n errors:\t\t" ,self$get_nErrors(),"\n.\n"
-    #    )
-    #  )
-    #  #print(private$results)
-    #  if (self$get_nErrors()>0){
-    #    tl$info('Tests with errors')
-    #    for (sr in self$get_errors()){
-    #      tl$info(sr$get_fullName())
-    #    }
-    #    for (sr in self$get_errors()){
-    #      err=sr$get_error()
-    #      tl$error(err$message)
-    #      tl$error(err$text)
-    #      tl$error(err$callStack)
-    #      tl$error(sr$summary())
-    #    }
-    #  }
-    #  #for (sr in private$results){
-    #  #  sr$summary(tl)
-    #  #}
-    #}
   )
 )

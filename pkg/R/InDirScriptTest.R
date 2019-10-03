@@ -14,18 +14,41 @@ InDirScriptTest<- R6Class("InDirScriptTest",
   private=list(
     #----------------------------
     run_code=function(sr,funToTest){
-      private$initIO()
-      on.exit(private$restore())
+      #private$initIO()
+	    if(dir.exists(private$myDirPath())){
+        lapply(
+          list.files(include.dirs=TRUE,full.names=TRUE,private$myDirPath()),
+          function(p){unlink(p,recursive=TRUE)}
+        )
+      }else{
+        dir.create(private$myDirPath(),recursive=TRUE)
+      }
+      # change into the private Dir
+      private$oldwd<-setwd(private$myDirPath())
+      
+      # create a testspecific library
+      myLib <- 'lib'
+      dir.create(myLib,recursive=TRUE)
+
+      oldLibPaths <- .libPaths()
+      newLibPaths <- append(myLib,oldLibPaths)
+      on.exit(setwd(private$oldwd))
+      prolog=as.character(body(self$setUp))
       lines=as.character(body(funToTest))
       cfn="testCode.R"
-      write(lines[2:length(lines)],cfn)
+      write(prolog[2:length(prolog)],cfn)
+      write(lines[2:length(lines)],cfn,append=TRUE)
       res=system2(
         "Rscript"
         ,args=list(cfn)
         ,stdout="log.stdout"
         ,stderr="log.stderr"
       )
-      if(res!=0){sr$set_fail()} 
+      if(res!=0){
+        sr$set_fail()
+        sr$add_stdOut(readLines("log.stdout"))
+        sr$add_stdErr(readLines("log.stderr"))
+      } 
       return(sr)
     }
   )

@@ -1,6 +1,7 @@
 importFrom(R6,R6Class)
 importFrom(parallel,detectCores,mclapply)
 importFrom(stringr,str_trim,str_split)
+importFrom(debugHelpers,pp,pe)
 export(
 	TestCase,
 	InDirTest,
