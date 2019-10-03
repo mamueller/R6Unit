@@ -14,7 +14,6 @@ InDirScriptTest<- R6Class("InDirScriptTest",
   private=list(
     #----------------------------
     run_code=function(sr,funToTest){
-      #private$initIO()
 	    if(dir.exists(private$myDirPath())){
         lapply(
           list.files(include.dirs=TRUE,full.names=TRUE,private$myDirPath()),
@@ -36,8 +35,8 @@ InDirScriptTest<- R6Class("InDirScriptTest",
       prolog=as.character(body(self$setUp))
       lines=as.character(body(funToTest))
       cfn="testCode.R"
-      write(prolog[2:length(prolog)],cfn)
-      write(lines[2:length(lines)],cfn,append=TRUE)
+      if (length(prolog)>1){ write(prolog[2:length(prolog)],cfn)}
+      if (length(lines)>1){write(lines[2:length(lines)],cfn,append=TRUE)}
       res=system2(
         "Rscript"
         ,args=list(cfn)

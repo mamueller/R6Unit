@@ -33,11 +33,11 @@ SingleTestResult<-R6Class("SingleTestResult",
     }
     ,
     add_stdOut=function(messages){
-      private$stdOut<-append(private$stdOut,messages)
+      private$stdOut<-c(private$stdOut,messages)
     }
     ,
     add_stdErr=function(messages){
-      private$stdErr<-append(private$stdErr,messages)
+      private$stdErr<-c(private$stdErr,messages)
     }
     ,
     get_stdErr=function(){
@@ -75,34 +75,19 @@ SingleTestResult<-R6Class("SingleTestResult",
     ,
     summary= function(){
         td<-private
-        textLines<-character()
-        #prepare the output
-        for(n in setdiff(names(td),'retVal')){
-          entry <- td[[n]]
-          if (n=='error'){
-            err <- td[[n]]
-            callStack <- err$callStack
-            callStack <- callStack[20:length(callStack)]
-            #callStack <- callStack[9:length(callStack)]
-            entry <- c(entry,callStack)
-            entry <- c(entry,self$get_stdOut())
-            entry <- c(entry,self$get_stdErr())
-          }
-          textLines<-c(textLines,sprintf("\n%s:=%s",n,entry))
-        }
-        return(textLines)
+        textLines<-unlist(lapply(
+            c('fullName','failure','error','stdOut','stdErr')
+            ,function(n){
+              entry=td[[n]]
+              text<-sprintf("%s:\n",n)
+              text<-c(entry)
+                if (n=='error'){
+                  callStack <- entry$callStack
+                  text<- c(text,callStack[20:length(callStack)])
+                }
+              text
+            }
+        ))
     }
   )
 )
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 

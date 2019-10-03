@@ -72,33 +72,39 @@ TestResults<-R6Class("TestResults",
     ,
     summary=function(){
       lines=c(
-          ':\n',
-          "test runs:\t",self$get_nRuns(),"\n",
-          "n failures:\t" ,self$get_nFailures(),"\n",
-          "deactivated:\t" ,self$get_nDeactivations(),"\n",
-          "n errors:\t\t" ,self$get_nErrors(),"\n.\n"
+          "###############################################"
+          ,sprintf("test runs:\t%s",self$get_nRuns())
+          ,sprintf("n failures:\t%s" ,self$get_nFailures())
+          ,sprintf("deactivated:\t%s" ,self$get_nDeactivations())
+          ,sprintf("n errors:\t\t%s" ,self$get_nErrors())
         )
       if (self$get_nErrors()>0){
-        lines=c(lines,'Tests with errors: ')
+        lines=c(lines,'############## Tests with errors: ')
         for (sr in self$get_errors()){
           lines=c(lines,sr$get_fullName())
         }
         for (sr in self$get_errors()){
+          lines=c(lines,"###############")
           lines=c(lines,sr$get_fullName())
           lines=c(lines,sr$summary())
         }
       }
       if (self$get_nFailures()>0){
-        lines=c(lines,'Tests with failures: ')
+        lines=c(lines,'############## Tests with failures: ')
         for (sr in self$get_failures()){
           lines=c(lines,sr$get_fullName())
         }
         for (sr in self$get_failures()){
+          lines=c(lines,"###############")
           lines=c(lines,sr$get_fullName())
           lines=c(lines,sr$summary())
         }
       }
       return(lines)
+    }
+    ,
+    print_summary=function(){
+      cat(paste(self$summary(),collapse='\n'),"\n")
     }
     ,
     get_singleResult=function(name){
