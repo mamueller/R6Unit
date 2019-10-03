@@ -14,6 +14,7 @@ InDirScriptTest<- R6Class("InDirScriptTest",
   private=list(
     #----------------------------
     run_code=function(sr,funToTest){
+      sr$add_stdOut(c("##################################",private$myDirPath())) 
 	    if(dir.exists(private$myDirPath())){
         lapply(
           list.files(include.dirs=TRUE,full.names=TRUE,private$myDirPath()),
