@@ -5,6 +5,7 @@ if (!is.element('devtools',installed.packages())){
 require(devtools)
 install.packages('stringr')
 devtools::install('pkg',build=FALSE)
+devtools::install_github('mamueller/debugHelpers',subdir='pkg')
 require(getopt)
 require(stringr)
 print(get_Rscript_filename())
