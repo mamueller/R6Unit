@@ -25,6 +25,30 @@ TestInDirTest<-R6Class("TestInDirTest",
 	  }
     ,
     #------------------------
+		test.cpDir=function(){
+      #create a nested testdir
+      pkgDir <- "test"
+      RDir<-"R"
+      manDir<-"man"
+      manManDir<-file.path("man","manMan")
+      dir.create(file.path(pkgDir,RDir),recursive=TRUE)
+      dir.create(file.path(pkgDir,manDir),recursive=TRUE)
+      dir.create(file.path(pkgDir,manManDir),manManDir,recursive=TRUE)
+      testFileName <- "source.R"
+      file.create(file.path(pkgDir,RDir,testFileName))
+
+      # copy the whole tree
+      back<-paste0(pkgDir,"_bak")
+      cpDir(pkgDir,back)
+      #
+      ##check if everything is there
+      self$assertTrue(dir.exists(file.path(back,RDir)))
+      self$assertTrue(dir.exists(file.path(back,manDir)))
+      self$assertTrue(dir.exists(file.path(back,manManDir)))
+      self$assertTrue(file.exists(file.path(back,RDir,testFileName)))
+		}
+    ,
+    #--------------------------------
 	  test.workingSetup=function(){
       # check if thw setUp function interpretes 
       # filepaths now locally
